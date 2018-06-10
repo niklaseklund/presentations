@@ -1,0 +1,32 @@
+#+TITLE: Vim for beginners
+#+AUTHOR: Niklas Carlsson
+#+EMAIL: niklas.carlsson@zenuity.com
+
+#+OPTIONS: num:nil reveal_control:nil toc:nil
+#+REVEAL_THEME: black
+#+REVEAL_TRANS: slide
+
+
+* Original vim keyboard
+#+ATTR_HTML: :height 200%, :width 200%
+[[./images/vim_keyboard.jpg]]
+
+
+* Code
+#+BEGIN_SRC python
+for i in range(10):
+    print(i)
+#+END_SRC
+
+* Tabular Tables
+
+#+ATTR_HTML: :frame void :rules none
+| Item     | Value | Quanity |
+|----------+-------+---------|
+| Apples   | 1$    |       7 |
+| Lemonade | 2$    |      18 |
+| Bread    | 3$    |       2 |
+
+#+BEGIN_NOTES
+This is how I like my tables, no outer border
+#+END_NOTES
