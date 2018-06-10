@@ -1,17 +1,154 @@
 #+TITLE: Vim for beginners
 #+AUTHOR: Niklas Carlsson
+#+DATE: 11.10.2016
 #+EMAIL: niklas.carlsson@zenuity.com
 
-#+OPTIONS: num:nil reveal_control:nil toc:nil
-#+REVEAL_THEME: black
+#+OPTIONS: num:nil reveal_control:nil toc:nil reveal_title_slide:nil
+#+OPTIONS: author:t date:t email:t
+#+OPTIONS: html5-fancy:t
+#+REVEAL_THEME: solarized
 #+REVEAL_TRANS: slide
 
+* Vim for beginners
+  #+ATTR_HTML: :style text-align:right
+  12 June 2018
 
-* Original vim keyboard
+* A brief history of Vim
+** Evolution
+- Developed in 1976 by Bill Joy
+- Developed on ~this~ keyboard
+- Focus on using the keyboard, not the mouse, and following touch typing practices
+- Vim was developed in the early 90's by Bram Moleanar
+- Neovim became a project a couple of years ago
+
+** Original vim keyboard
 #+ATTR_HTML: :height 200%, :width 200%
 [[./images/vim_keyboard.jpg]]
 
+#+BEGIN_NOTES
+#+END_NOTES
 
+* Modeless editing
+
+* Modal editing
+The default action is editing text.
+| normal mode     |
+| insert mode     |
+| visual mode     |
+| ex/command mode |
+
+* Horizontal movement
+
+| h    | move one char to the left             |
+| l    | move one char to the right            |
+| w    | move to the start of next word        |
+| b    | move to the beginning of current word |
+| e    | move to the end of current word       |
+| \^   | move to the start of the line         |
+| \$   | move to the end of the line           |
+| f{x} | find first instance of {x}            |
+| t{x} | move till the first instance of {x}   |
+
+* Vertical movement
+
+| j          | move one char down                            |
+| k          | move one char up                              |
+| {n}G       | move to line {n}                              |
+| G          | move to the end of the file                   |
+| gg         | move to the start of the file                 |
+| ()         | move by sentances                             |
+| {}         | move by paragraphs                            |
+| \/{string} | move forward to the first match of {string}   |
+| \?{string} | move backwards to the first match of {string} |
+Note: Movements and commands can be counted as well
+
+* Insert text
+
+| i | insert text before cursor     |
+| a | insert text after cursor      |
+| o | insert text on the line below |
+| O | insert text on the line above |
+
+* Undo and Redo
+
+This is a logical concequence of the dot as well.
+
+* The dot command
+
+The useful dotcommand. Repeat your last combo.
+
+* Modify text
+
+| d  | deletes        |
+| c  | changes        |
+| y  | yanks          |
+| dd | deletes a line |
+| cc | changes a line |
+| yy | yanks a line   |
+* Composable commands
+
+| d{movement} | deletes {movement} |
+| c{movement} | changes {movement} |
+| y{movement} | yanks {movement}   |
+
+| cw        | change word                   |
+| dG        | delete to the end of the file |
+| dtx       | ?                             |
+| y}        | ?                             |
+| c\/niklas | ?                             |
+
+* Text objects
+
+| i  | inside           |
+| a  | around           |
+| iw | inside word      |
+| ip | inside paragraph |
+| is | inside sentence  |
+| aw | around word      |
+
+#+BEGIN_NOTES
+Text objects are extendible, there are more that are available through plugins
+Example: Commentary, indent(useful for python)
+#+END_NOTES
+
+* Leader key
+
+Leader key will allow you to easily specifiy your own sequence of commands.
+This makes it easy to build Mnemonic sequences for useful things:
+Example:
+| <leader>gs | git status      |
+| <leader>gb | git blame       |
+| <leader>wv | window vertical |
+| <leader>wc | window close    |
+| <leader>ff | file, find      |
+
+* Customize Vim
+** Configuration file
+Done in ~home/.vimrc~ or in ~home/.config/nvim/init.vim~
+
+** Extending Vim with plugins
+
+* Setup Neovim
+
+~Install Neovim~
+#+BEGIN_SRC 
+sudo apt-add-repository ppa:neovim-ppa/stable
+sudo apt-get update
+sudo apt-get install neovim
+#+END_SRC
+
+~Download the configuration~
+#+BEGIN_SRC shell
+git clone https://github.com/niklascarlsson/vim_setup.git ~/vim_setup
+mkdir ~/.config/nvim
+cp ~/vim_setup/minimal.vim ~/.config/nvim/init.vim
+rm -rf ~/vim_setup
+#+END_SRC
+
+~Open Neovim in the terminal~
+#+BEGIN_SRC shell
+nvim
+#+END_SRC
 * Code
 #+BEGIN_SRC python
 for i in range(10):
