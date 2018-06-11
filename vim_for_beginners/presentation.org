@@ -306,7 +306,7 @@ Example:
 | <leader>ff | file, find      |
 #+END_NOTES
 
-* Q/A
+* Questions?
 * Demo :noexport:
 ** Navigate with the jump list
 ** Open different files
