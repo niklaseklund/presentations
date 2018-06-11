@@ -22,7 +22,7 @@
 ** Poor user design?
 [[./images/vim_user.png]]
 
-** Extremely difficult?
+** Poor user design?
 [[./images/vim_complexity.jpg]]
 
 * +Vim history+
@@ -63,7 +63,7 @@ A modal editor
 | Visual  | highlight text     |
 | Command | execute commands   |
 
-** Keyboard overview
+** Normal mode commands
 
 [[./images/vim_cheat_sheet.gif]]
 
