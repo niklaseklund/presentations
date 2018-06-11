@@ -13,14 +13,14 @@
   #+ATTR_HTML: :style text-align:right
   12 June 2018
 
-* A brief history of Vim
-** Evolution
-- Developed in 1976 by Bill Joy
-- Developed on ~this~ keyboard
-- Focus on using the keyboard, not the mouse, and following touch typing practices
-- Vim was developed in the early 90's by Bram Moleanar
-- Neovim became a project a couple of years ago
+* General conceptions of Vim
+** Poor user design?
+[[./images/vim_user.png]]
 
+** Extremely difficult?
+[[./images/vim_complexity.jpg]]
+
+* Vim history
 ** Original vim keyboard
 #+ATTR_HTML: :height 200%, :width 200%
 [[./images/vim_keyboard.jpg]]
@@ -28,14 +28,35 @@
 #+BEGIN_NOTES
 #+END_NOTES
 
-* Modeless editing
+* Modeless vs Modal editing
 
-* Modal editing
-The default action is editing text.
-| normal mode     |
-| insert mode     |
-| visual mode     |
-| ex/command mode |
+#+BEGIN_NOTES
+A modeless editor
+- Use modifier keys rather than modes
+- The default action is inserting
+#+END_NOTES
+
+#+BEGIN_NOTES
+A modal editor
+- The default action is editing existing text
+#+END_NOTES
+
+** Modal editing in Vim
+
+#+ATTR_HTML: :frame void :rules none
+~Modes~
+#+ATTR_REVEAL: :frag (roll-in)
+- normal
+- insert
+- visual
+- ex
+
+# | Modes       |
+# |-------------|
+# | normal mode |
+# | insert mode |
+# | visual mode |
+# | ex mode     |
 
 * Horizontal movement
 
@@ -49,6 +70,10 @@ The default action is editing text.
 | f{x} | find first instance of {x}            |
 | t{x} | move till the first instance of {x}   |
 
+#+BEGIN_NOTES
+- Movements can be counted
+#+END_NOTES
+
 * Vertical movement
 
 | j          | move one char down                            |
@@ -56,11 +81,15 @@ The default action is editing text.
 | {n}G       | move to line {n}                              |
 | G          | move to the end of the file                   |
 | gg         | move to the start of the file                 |
-| ()         | move by sentances                             |
 | {}         | move by paragraphs                            |
+| \*         | search for word under cursor, forward         |
+| \#         | search for word under cursor, backward        |
 | \/{string} | move forward to the first match of {string}   |
 | \?{string} | move backwards to the first match of {string} |
-Note: Movements and commands can be counted as well
+
+#+BEGIN_NOTES
+- In Gerrit all the commands works that have been described except ~gg~ and ~?~
+#+END_NOTES
 
 * Insert text
 
@@ -111,8 +140,84 @@ Text objects are extendible, there are more that are available through plugins
 Example: Commentary, indent(useful for python)
 #+END_NOTES
 
-* Leader key
+* Customize Vim
+** Configuration file
 
+#+BEGIN_SRC shell
+~/.vimrc #vim
+~/.config/nvim/init.vim #neovim
+#+END_SRC
+
+** Changing built in settings
+
+#+CAPTION: init.vim
+#+BEGIN_SRC vimrc
+syntax enable " Enable syntax highlighting
+set number " Show line number
+set undofile " Enables persistent undo
+set noswapfile " Disables swapfile
+set spelllang=en_us " Sets spelling language to english
+set hidden " Enable hidden buffers, buffers must not be saved
+set splitbelow splitright " Set Split behavior
+set mouse=a "Enable mouse interaction
+set clipboard+=unnamedplus " Enable clipboard paste from other sources
+set equalalways " Keep windows equal
+set foldlevelstart=99 " start unfolded
+set tabstop=4 shiftwidth=4 expandtab
+set ignorecase smartcase " smart case enabled
+#+END_SRC
+
+** Extending Vim with plugins
+
+#+CAPTION: init.vim
+#+BEGIN_SRC vimrc
+" Setup plugins {{{2
+call plug#begin(expand('~/.config/nvim/plugged'))
+
+" Define plugins
+Plug 'tpope/vim-fugitive' " Integrate git
+Plug 'skywind3000/asyncrun.vim' " Dispatch commands
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim' " Fuzzy finder
+Plug 'airblade/vim-gitgutter' " Git changes are seen in the gutter
+Plug 'tpope/vim-commentary' " Comments
+Plug 'tpope/vim-surround' " Change surrounding chars
+Plug 'tpope/vim-unimpaired' " Improve navigation
+Plug 'qpkorr/vim-bufkill' " Improve buffer handling
+Plug 'arcticicestudio/nord-vim' " Colorscheme dark
+Plug 'iCyMind/NeoSolarized' " Colorscheme light
+call plug#end()
+#+END_SRC
+
+#+BEGIN_NOTES
+There are different plugin managers for Vim
+- Above is code for installing plugins using Vim-Plug
+#+END_NOTES
+
+** Custom mappings
+
+#+BEGIN_SRC vimrc
+" Harmonize Y behavior with (C, D)
+map Y y$
+#+END_SRC
+
+#+ATTR_REVEAL: :frag (roll-in)
+#+BEGIN_SRC vimrc
+" Define leader key
+let mapleader=","
+" Open a terminal buffer
+nnoremap <silent> <leader>ot :term<CR>
+" Open git status window
+nnoremap <silent> <leader>gs :Gstatus<CR><C-w>K
+" Open a new tab with git blame of the current buffer
+nnoremap <silent> <leader>gb :tab sp <bar> :Gblame<CR>
+" Open a new window in a vertical split
+nnoremap <silent> <leader>wv <C-w>v
+" Find file
+nnoremap <silent> <leader>ff :Files<CR>
+#+END_SRC
+
+#+BEGIN_NOTES
 Leader key will allow you to easily specifiy your own sequence of commands.
 This makes it easy to build Mnemonic sequences for useful things:
 Example:
@@ -121,49 +226,21 @@ Example:
 | <leader>wv | window vertical |
 | <leader>wc | window close    |
 | <leader>ff | file, find      |
-
-* Customize Vim
-** Configuration file
-Done in ~home/.vimrc~ or in ~home/.config/nvim/init.vim~
-
-** Extending Vim with plugins
+#+END_NOTES
 
 * Setup Neovim
 
-~Install Neovim~
-#+BEGIN_SRC 
+~Install~
+#+BEGIN_SRC
 sudo apt-add-repository ppa:neovim-ppa/stable
 sudo apt-get update
 sudo apt-get install neovim
 #+END_SRC
 
-~Download the configuration~
+~Download configuration~
 #+BEGIN_SRC shell
 git clone https://github.com/niklascarlsson/vim_setup.git ~/vim_setup
 mkdir ~/.config/nvim
 cp ~/vim_setup/minimal.vim ~/.config/nvim/init.vim
 rm -rf ~/vim_setup
 #+END_SRC
-
-~Open Neovim in the terminal~
-#+BEGIN_SRC shell
-nvim
-#+END_SRC
-* Code
-#+BEGIN_SRC python
-for i in range(10):
-    print(i)
-#+END_SRC
-
-* Tabular Tables
-
-#+ATTR_HTML: :frame void :rules none
-| Item     | Value | Quanity |
-|----------+-------+---------|
-| Apples   | 1$    |       7 |
-| Lemonade | 2$    |      18 |
-| Bread    | 3$    |       2 |
-
-#+BEGIN_NOTES
-This is how I like my tables, no outer border
-#+END_NOTES
