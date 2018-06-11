@@ -322,12 +322,11 @@ Example:
 ** Substitution in a single file
 ** Substitution in multiple files
 ** Navigate with the jump list
-** Open different files
 ** Git integration
 ** Built in completion
-* Setup Neovim :noexport:
+* Try it out yourself
 
-~Install~
+~Install Neovim~
 #+BEGIN_SRC
 sudo apt-add-repository ppa:neovim-ppa/stable
 sudo apt-get update
@@ -341,3 +340,8 @@ mkdir ~/.config/nvim
 cp ~/vim_setup/minimal.vim ~/.config/nvim/init.vim
 rm -rf ~/vim_setup
 #+END_SRC
+
+* Prepare presentation [3/3] :noexport:
+- [X] Select strategy for what code to use for examples
+- [X] Finish a first outline of the presentation
+- [X] Update the latest corrected Neovim setup
