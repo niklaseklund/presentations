@@ -78,6 +78,10 @@ A modal editor
 | f{char} | find first instance of {char}          |
 | t{char} | move till the first instance of {char} |
 
+#+BEGIN_NOTES
+Mnemonics plays a big role in Vim
+#+END_NOTES
+
 ** Vertical
 
 #+ATTR_HTML: :frame void :rules none
@@ -133,6 +137,7 @@ Repeat your last change
 
 * Modify text
 
+** Operators
 #+ATTR_HTML: :frame void :rules none
 #+ATTR_REVEAL: :frag (roll-in)
 | Command | Action         |
@@ -307,10 +312,13 @@ Example:
 #+END_NOTES
 
 * Questions?
-* Demo :noexport:
+* Demo
+** Substitution in a single file
+** Substitution in multiple files
 ** Navigate with the jump list
 ** Open different files
 ** Git integration
+** Built in completion
 * Setup Neovim :noexport:
 
 ~Install~
