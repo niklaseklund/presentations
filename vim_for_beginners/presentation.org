@@ -3,15 +3,20 @@
 #+DATE: 11.10.2016
 #+EMAIL: niklas.carlsson@zenuity.com
 
-#+OPTIONS: num:nil reveal_control:nil toc:nil reveal_title_slide:nil
-#+OPTIONS: author:t date:t email:t
+#+OPTIONS: num:nil reveal_control:nil toc:nil 
+#+OPTIONS: reveal_title_slide:auto
+#+OPTIONS: title:t author:nil date:t email:nil timestamp:nil
 #+OPTIONS: html5-fancy:t
 #+REVEAL_THEME: moon
 #+REVEAL_TRANS: slide
 
-* Vim for beginners
+* Vim for beginners :noexport:
   #+ATTR_HTML: :style text-align:right
   12 June 2018
+  
+  #+BEGIN_NOTES
+  custom title slide
+  #+END_NOTES
 
 * General conceptions of Vim
 ** Poor user design?
