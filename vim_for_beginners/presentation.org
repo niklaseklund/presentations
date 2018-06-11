@@ -6,7 +6,7 @@
 #+OPTIONS: num:nil reveal_control:nil toc:nil reveal_title_slide:nil
 #+OPTIONS: author:t date:t email:t
 #+OPTIONS: html5-fancy:t
-#+REVEAL_THEME: solarized
+#+REVEAL_THEME: moon
 #+REVEAL_TRANS: slide
 
 * Vim for beginners
@@ -20,12 +20,19 @@
 ** Extremely difficult?
 [[./images/vim_complexity.jpg]]
 
-* Vim history
-** Original vim keyboard
+* +Vim history+
+** Optimized for keyboard usage
 #+ATTR_HTML: :height 200%, :width 200%
 [[./images/vim_keyboard.jpg]]
 
 #+BEGIN_NOTES
+#+END_NOTES
+
+** Remap ctrl/escape
+[[./images/xcape.png]]
+
+#+BEGIN_NOTES
+Remapping escape and control can be a great way to improve usage of Vim
 #+END_NOTES
 
 * Modeless vs Modal editing
@@ -44,101 +51,172 @@ A modal editor
 ** Modal editing in Vim
 
 #+ATTR_HTML: :frame void :rules none
-~Modes~
+| Modes   | Usage              |
+|---------+--------------------|
+| Normal  | navigate/edit text |
+| Insert  | insert text        |
+| Visual  | highlight text     |
+| Command | execute commands   |
+
+** Keyboard overview
+
+[[./images/vim_cheat_sheet.gif]]
+
+* Movement
+** Horizontal
+
+#+ATTR_HTML: :frame void :rules none
 #+ATTR_REVEAL: :frag (roll-in)
-- normal
-- insert
-- visual
-- ex
+| Command | Action                                 |
+|---------+----------------------------------------|
+| h       | move one char to the left              |
+| l       | move one char to the right             |
+| w       | move to the start of next word         |
+| b       | move to the beginning of current word  |
+| e       | move to the end of current word        |
+| ^ / $   | move to the beginning/end of the line  |
+| f{char} | find first instance of {char}          |
+| t{char} | move till the first instance of {char} |
 
-# | Modes       |
-# |-------------|
-# | normal mode |
-# | insert mode |
-# | visual mode |
-# | ex mode     |
+** Vertical
 
-* Horizontal movement
-
-| h    | move one char to the left             |
-| l    | move one char to the right            |
-| w    | move to the start of next word        |
-| b    | move to the beginning of current word |
-| e    | move to the end of current word       |
-| \^   | move to the start of the line         |
-| \$   | move to the end of the line           |
-| f{x} | find first instance of {x}            |
-| t{x} | move till the first instance of {x}   |
-
-#+BEGIN_NOTES
-- Movements can be counted
-#+END_NOTES
-
-* Vertical movement
-
-| j          | move one char down                            |
-| k          | move one char up                              |
-| {n}G       | move to line {n}                              |
-| G          | move to the end of the file                   |
-| gg         | move to the start of the file                 |
-| {}         | move by paragraphs                            |
-| \*         | search for word under cursor, forward         |
-| \#         | search for word under cursor, backward        |
-| \/{string} | move forward to the first match of {string}   |
-| \?{string} | move backwards to the first match of {string} |
+#+ATTR_HTML: :frame void :rules none
+#+ATTR_REVEAL: :frag (roll-in)
+| Command     | Action                                        |
+|-------------+-----------------------------------------------|
+| j           | move one char down                            |
+| k           | move one char up                              |
+| {n}G        | move to line {n}                              |
+| gg / G      | move to the beginning/end of the file         |
+| { / }       | move to the beginning/end paragraphs          |
+| * / #       | forward/backward search for word under cursor |
+| /{s} / ?{s} | forward/backward search for string {s}        |
 
 #+BEGIN_NOTES
 - In Gerrit all the commands works that have been described except ~gg~ and ~?~
 #+END_NOTES
 
+** Movements are countable
+
+#+BEGIN_QUOTE
+Number + Movement
+#+END_QUOTE
+
+#+BEGIN_NOTES
+- Movements can be counted
+#+END_NOTES
+
 * Insert text
 
-| i | insert text before cursor     |
-| a | insert text after cursor      |
-| o | insert text on the line below |
-| O | insert text on the line above |
+#+ATTR_HTML: :frame void :rules none
+#+ATTR_REVEAL: :frag (roll-in)
+| Command | Action                                       |
+| i / a   | insert text before/after cursor              |
+| I / A   | insert text at the beginning/end of the line |
+| o / O   | insert text on the line below/above          |
 
-* Undo and Redo
+* Undo / Redo
 
-This is a logical concequence of the dot as well.
+#+ATTR_HTML: :frame void :rules none
+#+ATTR_REVEAL: :frag (roll-in)
+| Command | Action |
+| u       | undo   |
+| ctrl-r  | redo   |
+
+#+BEGIN_NOTES
+- undo / redo are dependent on your atomic edits in insert mode
+#+END_NOTES
 
 * The dot command
 
-The useful dotcommand. Repeat your last combo.
+Repeat your last change
 
 * Modify text
 
-| d  | deletes        |
-| c  | changes        |
-| y  | yanks          |
-| dd | deletes a line |
-| cc | changes a line |
-| yy | yanks a line   |
-* Composable commands
+#+ATTR_HTML: :frame void :rules none
+#+ATTR_REVEAL: :frag (roll-in)
+| Command | Action         |
+|---------+----------------|
+| d       | delete         |
+| c       | change         |
+| y       | yank           |
 
-| d{movement} | deletes {movement} |
-| c{movement} | changes {movement} |
-| y{movement} | yanks {movement}   |
 
-| cw        | change word                   |
-| dG        | delete to the end of the file |
-| dtx       | ?                             |
-| y}        | ?                             |
-| c\/niklas | ?                             |
+#+REVEAL: split
+#+ATTR_HTML: :frame void :rules none
+| Command | Action       |
+|---------+--------------|
+| dd      | delete line  |
+| cc      | change line  |
+| yy      | yank line    |
 
-* Text objects
+* Commands are composable
 
-| i  | inside           |
-| a  | around           |
-| iw | inside word      |
-| ip | inside paragraph |
-| is | inside sentence  |
-| aw | around word      |
+#+ATTR_HTML: :height 200%, :width 200%
+[[./images/composable.jpg]]
+
+** Vim as a language
+#+ATTR_REVEAL: :frag (roll-in)
+#+BEGIN_QUOTE
+Verb + Noun
+#+END_QUOTE
+
+
+#+ATTR_REVEAL: :frag (roll-in)
+#+BEGIN_QUOTE
+(Number) + Operator + Movement
+#+END_QUOTE
+
+** Operator + Movement
+
+#+ATTR_HTML: :frame void :rules none
+| Command     | Action            |
+| d{movement} | delete {movement} |
+| c{movement} | change {movement} |
+| y{movement} | yank {movement}   |
+
+** Examples
+
+#+ATTR_HTML: :frame void :rules none
+| Command   | Action |
+| cw        | ?      |
+| dG        | ?      |
+| dtx       | ?      |
+| y}        | ?      |
+| c\/niklas | ?      |
+
+** Limitations
+#+ATTR_REVEAL: :frag (roll-in)
+
+- need to perform a movement when we are not positioned correctly
+- movement + operator + movement is not repeatable
+
+* Operate on objects
+
+** Text objects
+There are two different types of text objects
+- i, as in inside
+- a, as in around
+
+#+REVEAL: split
+#+ATTR_HTML: :frame void :rules none
+| Text object | Meaning                    |
+|-------------+----------------------------|
+| i / aw      | inside/around word         |
+| i / a'      | inside/around single quote |
+| i / a)      | inside/around parentheses  |
+| i / ap      | inside/around paragraph    |
+| i / as      | inside/around sentence     |
 
 #+BEGIN_NOTES
 Text objects are extendible, there are more that are available through plugins
 Example: Commentary, indent(useful for python)
 #+END_NOTES
+
+** The general Vim command
+#+BEGIN_QUOTE
+(Number) + Operator + {Movement / Text Object}
+#+END_QUOTE
 
 * Customize Vim
 ** Configuration file
@@ -228,7 +306,12 @@ Example:
 | <leader>ff | file, find      |
 #+END_NOTES
 
-* Setup Neovim
+* Q/A
+* Demo :noexport:
+** Navigate with the jump list
+** Open different files
+** Git integration
+* Setup Neovim :noexport:
 
 ~Install~
 #+BEGIN_SRC
