@@ -22,7 +22,7 @@
 ** Poor user design?
 [[./images/vim_user.png]]
 
-** Poor user design?
+** Too difficult?
 [[./images/vim_complexity.jpg]]
 
 * +Vim history+
