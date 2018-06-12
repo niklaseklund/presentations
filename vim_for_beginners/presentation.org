@@ -75,9 +75,9 @@ A modal editor
 |---------+----------------------------------------|
 | h       | move one char to the left              |
 | l       | move one char to the right             |
-| w       | move to the start of next word         |
-| b       | move to the beginning of current word  |
-| e       | move to the end of current word        |
+| w       | move to the next word                  |
+| b       | move to the beginning of a word        |
+| e       | move to the end of a word              |
 | ^ / $   | move to the beginning/end of the line  |
 | f{char} | find first instance of {char}          |
 | t{char} | move till the first instance of {char} |
