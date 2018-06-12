@@ -1,9 +1,9 @@
 #+TITLE: Vim for beginners
 #+AUTHOR: Niklas Carlsson
-#+DATE: 11.10.2016
+#+DATE: 12 June 2018
 #+EMAIL: niklas.carlsson@zenuity.com
 
-#+OPTIONS: num:nil reveal_control:nil toc:nil 
+#+OPTIONS: num:nil reveal_control:nil toc:nil
 #+OPTIONS: reveal_title_slide:auto
 #+OPTIONS: title:t author:nil date:t email:nil timestamp:nil
 #+OPTIONS: html5-fancy:t
@@ -13,7 +13,7 @@
 * Vim for beginners :noexport:
   #+ATTR_HTML: :style text-align:right
   12 June 2018
-  
+
   #+BEGIN_NOTES
   custom title slide
   #+END_NOTES
