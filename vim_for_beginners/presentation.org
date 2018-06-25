@@ -372,6 +372,8 @@ with the built in ones and find out what the limitations are.
 - :AsyncRun command
 #+END_NOTES
 
+** Built in terminal emulator
+** Persistent undo
 ** Interact with Git
 
 #+BEGIN_NOTES
