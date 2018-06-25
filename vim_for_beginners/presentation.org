@@ -381,6 +381,28 @@ with the built in ones and find out what the limitations are.
 - Git log
 #+END_NOTES
 
+* Vim resources
+** Books
+
+#+ATTR_HTML: :width 50% :height 50%
+[[./images/practical_vim.jpeg]]
+
+#+REVEAL: split
+#+ATTR_HTML: :width 50% :height 50%
+[[./images/modern_vim.jpeg]]
+
+** Podcast
+
+[[./images/vim_casts.png]]
+
+** Screencast
+
+[[./images/vim_screencast.png]]
+
+** Presentations
+
+[[./images/thoughtbot.png]]
+
 * Try it out yourself
 
 ~Install Neovim~
