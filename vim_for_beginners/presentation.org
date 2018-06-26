@@ -1,6 +1,6 @@
 #+TITLE: Vim for beginners
 #+AUTHOR: Niklas Carlsson
-#+DATE: 12 June 2018
+#+DATE: 27 June 2018
 #+EMAIL: niklas.carlsson@zenuity.com
 
 #+OPTIONS: num:nil reveal_control:nil toc:nil
@@ -33,7 +33,15 @@
 #+BEGIN_NOTES
 #+END_NOTES
 
-** Remap ctrl/escape
+** Remap capslock to ctrl
+
+[[./images/remap_contrl.png]]
+
+#+BEGIN_NOTES
+This is done using Gnome Tweak Tool
+#+END_NOTES
+
+** Remap capslock to ctrl and escape
 [[./images/xcape.png]]
 
 #+BEGIN_NOTES
@@ -438,6 +446,26 @@ mkdir ~/.config/nvim
 cp ~/vim_setup/minimal.vim ~/.config/nvim/init.vim
 rm -rf ~/vim_setup
 #+END_SRC
+
+* Questions that Vim asks :noexport:
+
+** How much of what you see on your screen is relevant?
+** If you don't have a mouse, then how do you navigate?
+
+#+BEGIN_NOTES
+Navigation by text allows you to type where you want to go and with fuzzy
+finding it is a really nice way of moving around.
+
+The jump list makes it possible to remove scrolling in a lot of cases.
+#+END_NOTES
+
+** If some of the commands are hard to type, should they be?
+
+#+BEGIN_NOTES
+I switched over to american layout not that long ago and never looking back.
+What should you optimize for? Why sacrifice usability for the rare cases I
+actually write Swedish, not the opposite?
+#+END_NOTES
 
 * Prepare presentation [3/3] :noexport:
 - [X] Select strategy for what code to use for examples
