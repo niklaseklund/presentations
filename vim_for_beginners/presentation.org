@@ -340,6 +340,13 @@ Example:
 #+BEGIN_QUOTE
 Let's go through some common usecases
 #+END_QUOTE
+
+** fzf integration
+
+#+BEGIN_NOTES
+Fzf is a great commandline tool and it integrates nicely with Vim
+#+END_NOTES
+
 ** Minimize writing by utilizing completion
 
 #+BEGIN_NOTES
@@ -372,8 +379,18 @@ with the built in ones and find out what the limitations are.
 - :AsyncRun command
 #+END_NOTES
 
+** Extended text objects
+
+#+BEGIN_NOTES
+indent
+argument
+exchange
+comment
+#+END_NOTES
+
 ** Built in terminal emulator
 ** Persistent undo
+** Jump-list
 ** Interact with Git
 
 #+BEGIN_NOTES
