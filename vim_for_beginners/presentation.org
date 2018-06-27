@@ -279,6 +279,23 @@ set ignorecase smartcase " smart case enabled
 map Y y$
 #+END_SRC
 
+* Try it out yourself
+
+~Install Neovim~
+#+BEGIN_SRC
+sudo apt-add-repository ppa:neovim-ppa/stable
+sudo apt-get update
+sudo apt-get install neovim
+#+END_SRC
+
+~Download configuration~
+#+BEGIN_SRC shell
+git clone https://github.com/niklascarlsson/vim_setup.git ~/vim_setup
+mkdir ~/.config/nvim
+cp ~/vim_setup/minimal.vim ~/.config/nvim/init.vim
+rm -rf ~/vim_setup
+#+END_SRC
+
 * Vim as your editor
 ** Improvements of vanilla Vim
 
@@ -293,19 +310,25 @@ map Y y$
 
 #+CAPTION: init.vim
 #+BEGIN_SRC vimrc
-" Setup plugins {{{2
 call plug#begin(expand('~/.config/nvim/plugged'))
 
 " Define plugins
 Plug 'tpope/vim-fugitive' " Integrate git
 Plug 'skywind3000/asyncrun.vim' " Dispatch commands
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim' " Fuzzy finder
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } " Fuzzy finding
+Plug 'junegunn/fzf.vim'
 Plug 'airblade/vim-gitgutter' " Git changes are seen in the gutter
 Plug 'tpope/vim-commentary' " Comments
 Plug 'tpope/vim-surround' " Change surrounding chars
 Plug 'tpope/vim-unimpaired' " Improve navigation
+Plug 'tpope/vim-repeat' " Improve dot command for plugins
+Plug 'kana/vim-textobj-user' " Enable custom text objects
+Plug 'kana/vim-textobj-indent' " Indentation text object
+Plug 'sgur/vim-textobj-parameter' " Function argument text object
+Plug 'tommcdo/vim-exchange' " Provide exchange object
 Plug 'qpkorr/vim-bufkill' " Improve buffer handling
+Plug 'airblade/vim-rooter' " Enable automatic detection and change to git root
+Plug 'Konfekt/FastFold' " Improve folding performance
 Plug 'arcticicestudio/nord-vim' " Colorscheme dark
 Plug 'iCyMind/NeoSolarized' " Colorscheme light
 call plug#end()
@@ -429,23 +452,6 @@ comment
 ** Presentations
 
 [[./images/thoughtbot.png]]
-
-* Try it out yourself
-
-~Install Neovim~
-#+BEGIN_SRC
-sudo apt-add-repository ppa:neovim-ppa/stable
-sudo apt-get update
-sudo apt-get install neovim
-#+END_SRC
-
-~Download configuration~
-#+BEGIN_SRC shell
-git clone https://github.com/niklascarlsson/vim_setup.git ~/vim_setup
-mkdir ~/.config/nvim
-cp ~/vim_setup/minimal.vim ~/.config/nvim/init.vim
-rm -rf ~/vim_setup
-#+END_SRC
 
 * Questions that Vim asks :noexport:
 
