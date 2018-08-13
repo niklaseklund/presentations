@@ -1,0 +1,282 @@
+#+TITLE: demonstration
+
+* Org-mode
+** Background
+
+~What do I use org-mode for?~
+- Write presentation using js-reveal
+- Keeping notes
+- Document reproducable steps for me
+- Code experimentation
+
+** Literate programming with Babel
+*** Shell
+
+#+BEGIN_SRC sh :results output
+ls
+#+END_SRC
+
++ Select language
++ Define directory
++ Define output
+
+*** Sessions
+
+This is how we assing a variable in bash
+
+#+BEGIN_SRC sh :session my-demo-session :results silent
+ENV="Org-mode"
+#+END_SRC
+
+And this is how we view it
+
+#+BEGIN_SRC sh :session my-demo-session :exports both
+echo $ENV
+echo $ENV2
+#+END_SRC
+
+#+RESULTS:
+: Org-mode
+
+#+BEGIN_SRC sh :session my-demo-session :results silent
+ENV2="Test-niklas"
+#+END_SRC
+
+
+#+RESULTS:
+| Org-mode    |
+| Test-niklas |
+
+
+
++ Controlled with the session argument
++ ~org-babel-execute-subtree~
+
+
+#+BEGIN_SRC python :session my-python-session :results silent
+var = 3
+#+END_SRC
+
+
+#+BEGIN_SRC python :session my-python-session :results output
+for i in range(var):
+    print(i)
+#+END_SRC
+
+#+RESULTS:
+: 0
+: 1
+: 2
+
+*** Noweb
+
+#+NAME: variable-definition1
+#+BEGIN_SRC python
+var = 3
+#+END_SRC
+
+#+NAME: loop-implementation1
+#+BEGIN_SRC python
+for i in range(var):
+    print(i)
+#+END_SRC
+
+#+NAME: find-executable-rg
+#+BEGIN_SRC elisp :results silent
+(message "rg_exec = \"%s\""(executable-find "pass"))
+#+END_SRC
+
+#+BEGIN_SRC python :noweb yes :results output
+<<variable-definition1>>
+<<loop-implementation1>>
+<<find-executable-rg()>>
+print(rg_exec)
+#+END_SRC
+
+#+RESULTS:
+: 0
+: 1
+: 2
+: /usr/bin/pass
+
+
+*** Tangle
+
+#+BEGIN_SRC python :noweb yes :results output :tangle ~/temp/org-demo.py
+<<variable-definition1>>
+<<loop-implementation1>>
+<<find-executable-rg()>>
+print(rg_exec)
+#+END_SRC
+
+#+BEGIN_SRC sh :dir ~/temp/
+python org-demo.py
+#+END_SRC
+
+#+RESULTS:
+|             0 |
+|             1 |
+|             2 |
+| /usr/bin/pass |
+
+*** PlantUML
+
+#+BEGIN_SRC plantuml :file ~/temp/org-plant-1.png :export both
+@startuml
+class Car
+
+Driver - Car : drives >
+Car *- Wheel : have 4 >
+Car -- Person : < owns
+
+@enduml
+#+END_SRC
+
+#+RESULTS:
+[[file:~/temp/org-plant-1.png]]
+
+*** TRAMP
+
+We can use tramp as well:
+#+BEGIN_SRC sh :dir /ssh:vdi: :results output
+ls
+cat test.cpp
+#+END_SRC
+
+#+RESULTS:
+: anothertestfile.txt  cluster.org  test.cpp  test.test  test.txt
+: #include <iostream>
+:
+: // This is the main function
+:
+: int main(int argc, char *argv[]) {
+:     std::cout << "hello hello" << std::endl;
+:     return 0;
+: }
+
+#+BEGIN_SRC sh :results output
+docker images
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+REPOSITORY                                                  TAG                 IMAGE ID            CREATED             SIZE
+niklascarlsson/minimal_python3                              latest              0a6ecff0175a        12 days ago         101MB
+<none>                                                      <none>              9f0014a30887        12 days ago         101MB
+docker_compose_product-service                              latest              a30ec09b0531        13 days ago         702MB
+hello-apache                                                latest              22a9a6679f64        13 days ago         367MB
+niklascarlsson/myfirstapp                                   latest              f8e1f55f87bb        13 days ago         56.7MB
+python                                                      3.6-alpine          9315c0474848        2 weeks ago         74.9MB
+php                                                         7.0-apache          647225efc6f2        3 weeks ago         367MB
+php                                                         apache              5e5a59788e34        3 weeks ago         377MB
+hello-world                                                 latest              2cb0d9787c4d        4 weeks ago         1.85kB
+alpine                                                      3.5                 a2b04ae28915        5 weeks ago         3.99MB
+alpine                                                      latest              11cd0b38bc3c        5 weeks ago         4.41MB
+artifactory.zenuity.com:5000/sf/pydev                       20180705_1215       3a8704815e87        5 weeks ago         9.22GB
+artifactory.zenuity.com:5000/sf/buildros                    20180705_1215       1a1f424934e8        5 weeks ago         7.62GB
+artifactory.zenuity.com:5000/sf/clangtools                  20180705_1215       3822e547b10a        5 weeks ago         6.09GB
+artifactory.zenuity.com:5000/sf/pclint                      20180705_1215       8159ba966ead        5 weeks ago         5.61GB
+artifactory.zenuity.com:5000/sf/build                       20180705_1215       72543a23dad1        5 weeks ago         5.13GB
+artifactory.zenuity.com:5000/sf/pep8                        20180705_1215       db4cbb170db8        5 weeks ago         383MB
+python                                                      3-onbuild           292ed8dee366        6 weeks ago         690MB
+artifactory.zenuity.com:5000/sf/verapp                      20180511_1625       8c9782747ad2        3 months ago        196MB
+artifactory.zenuity.com:5000/sf/astyle                      20180511_1625       c34c3e655fe9        3 months ago        295MB
+registry                                                    2                   d1fd7d86a825        7 months ago        33.3MB
+swf1.artifactory.cm.volvocars.biz:5007/sf/pydev             20171115_1903       a373d7a9f09b        9 months ago        8.46GB
+boot2docker/boot2docker                                     17.10.0-ce          1e3e20990ed9        9 months ago        2.22GB
+swf1.artifactory.cm.volvocars.biz:5007/sf/pclintplus        20171004_1307       86dbc1885e3c        10 months ago       5.09GB
+swf1.artifactory.cm.volvocars.biz:5007/sf/pclint            20170928_0911       10937937e9fb        10 months ago       5.5GB
+swf1.artifactory.cm.volvocars.biz:5007/sf/fast_clangtools   20170920_0907       c453d55e6390        10 months ago       37GB
+swf1.artifactory.cm.volvocars.biz:5007/sf/buildros          20170920_0907       f7d8b8ab13a2        10 months ago       7.45GB
+swf1.artifactory.cm.volvocars.biz:5007/sf/xbuild            20170920_0907       bd526ca7755e        10 months ago       4.55GB
+swf1.artifactory.cm.volvocars.biz:5007/sf/doc               20170920_0907       629db8a9469c        10 months ago       866MB
+swf1.artifactory.cm.volvocars.biz:5007/sf/pep8              20170920_0907       a0973c999911        10 months ago       349MB
+swf1.artifactory.cm.volvocars.biz:5007/sf/build             20170920_0907       f7db44c2d505        10 months ago       5.03GB
+swf1.artifactory.cm.volvocars.biz:5007/sf/verapp            20170707_1753       34f77997b4f8        13 months ago       195MB
+swf1.artifactory.cm.volvocars.biz:5007/sf/astyle            20170707_1753       825ad33acaeb        13 months ago       276MB
+phusion/baseimage                                           0.9.19              c39664f3d4e5        2 years ago         226MB
+#+end_example
+
+#+BEGIN_SRC sh :session my-docker-session
+docker run -it alpine /bin/sh
+#+END_SRC
+
+#+RESULTS:
+
+#+BEGIN_SRC sh
+docker ps
+#+END_SRC
+
+#+RESULTS:
+| CONTAINER    | ID     | IMAGE   | COMMAND | CREATED | STATUS | PORTS | NAMES |         |                 |
+| c0a6fbd5bb6f | alpine | /bin/sh |       3 | seconds | ago    | Up    |     3 | seconds | serene_lovelace |
+
+#+BEGIN_SRC sh :dir /docker:serene_lovelace:/
+ls
+#+END_SRC
+
+#+RESULTS:
+| [1;34mbin[m | [1;34metc[m  | [1;34mlib[m   | [1;34mmnt[m  | [1;34mroot[m | [1;34msbin[m | [1;34msys[m | [1;34musr[m |
+| [1;34mdev[m | [1;34mhome[m | [1;34mmedia[m | [1;34mproc[m | [1;34mrun[m  | [1;34msrv[m  | [1;34mtmp[m | [1;34mvar[m |
+*** C++
+**** Hello world
+
+#+BEGIN_SRC C++ :results output
+#include <iostream>
+
+int main(int argc, char *argv[]) {
+    std::cout << "Hello from org-mode" << std::endl;
+    return 0;
+}
+#+END_SRC
+
+#+RESULTS:
+: Hello from org-mode
+
+**** Eigen
+
+#+BEGIN_SRC C++ :flags '("-I ~/Dropbox/Code/Eigen") :results output
+#include <iostream>
+#include <Eigen/Dense>
+
+int main(int argc, char *argv[]) {
+    Eigen::MatrixXd mat = Eigen::MatrixXd::Random(3, 5);
+    std::cout << "mat = " << mat << std::endl;
+    return 0;
+}
+#+END_SRC
+
+#+RESULTS:
+: mat =   0.680375    0.59688  -0.329554    0.10794  -0.270431
+:  -0.211234   0.823295   0.536459 -0.0452059  0.0268018
+:   0.566198  -0.604897  -0.444451   0.257742   0.904459
+
+* Notes
+** Babel
+*** Shell
+- Create just a source code block
+- Select sh language
+- Show with :results output and without
+- Change directory to show that it's possible
+
+*** Session
+- Create one block with assigning a bash variable
+- Create one block with echoing that variable
+- Make a Python example and show that it work as well
+- Show that we easily open a mode specific buffer with ~C-c '~
+- Show the nice functions from John Kitchen for rerunning or killing running sessions
+*** Noweb
+- Create a variable defintition
+- Create an implementation
+- Create a block that uses noweb and use this building blocks
+- Create an elisp block to show mixing of languages
+- Make the elisp block print the path to an executable
+*** PlantUML
+- Showcase that we can easily have blocks for that as well.
+*** TRAMP
+- Show that it's possible to ls and cat on the ~vdi~ computer
+- Showcase docker possibilities
+*** C++
+- show C++ hello world example
+- show C++ Eigen example
+- show without flags first that it fails, but when we add the path to Eigen it succeeds.
