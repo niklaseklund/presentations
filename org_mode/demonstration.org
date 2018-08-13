@@ -218,6 +218,26 @@ ls
 #+RESULTS:
 | [1;34mbin[m | [1;34metc[m  | [1;34mlib[m   | [1;34mmnt[m  | [1;34mroot[m | [1;34msbin[m | [1;34msys[m | [1;34musr[m |
 | [1;34mdev[m | [1;34mhome[m | [1;34mmedia[m | [1;34mproc[m | [1;34mrun[m  | [1;34msrv[m  | [1;34mtmp[m | [1;34mvar[m |
+*** MatplotLib
+
+#+BEGIN_SRC python :session :results file
+import numpy as np
+import matplotlib
+matplotlib.use('Agg')
+from matplotlib import pyplot as plt
+graylevel = 0.75
+fig=plt.figure(figsize=(3,2))
+X = np.linspace(0, 7, 10000)
+plt.plot(X, 4 * np.sin(X))
+plt.plot(X, np.cos(X))
+fig.tight_layout()
+plt.savefig('myfig.png')
+'myfig.png' # return this to org-mode
+#+END_SRC
+
+#+RESULTS:
+[[file:myfig.png]]
+
 *** C++
 **** Hello world
 
