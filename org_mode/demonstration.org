@@ -9,7 +9,29 @@
 - Document reproducable steps for me
 - Code experimentation
 
+** Some basics
+
+- Tables
+
+|-------------+-------------------------|
+| Command     | Action                  |
+|-------------+-------------------------|
+| G           | go to end               |
+| :%s/new/old | substitute old with new |
+
+- Narrow subtree
+- Widen
+
 ** Literate programming with Babel
+*** Babel blocks
+
+#+BEGIN_SRC elisp
+(message "hello")
+#+END_SRC
+
+#+RESULTS:
+: hello
+
 *** Shell
 
 #+BEGIN_SRC sh :results output
