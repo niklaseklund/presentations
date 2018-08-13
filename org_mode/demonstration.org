@@ -34,9 +34,31 @@
 
 *** Shell
 
-#+BEGIN_SRC sh :results output
-ls
+#+NAME: output-values
+#+BEGIN_SRC sh :results table :dir ~/src/presentations/
+ls -la
 #+END_SRC
+
+https://orgmode.org/manual/var.html
+
+#+RESULTS: output-values
+| total       | 24 |                |       |      |     |    |       |                   |
+| drwxr-xr-x  |  7 | niklascarlsson | staff |  224 | Aug | 13 | 17:36 | 0                 |
+| drwxr-xr-x  | 11 | niklascarlsson | staff |  352 | Aug |  3 | 21:40 | ..                |
+| -rw-r--r--@ |  1 | niklascarlsson | staff | 6148 | Jun | 10 | 20:44 | .DS_Store         |
+| drwxr-xr-x  | 14 | niklascarlsson | staff |  448 | Aug | 13 | 17:49 | .git              |
+| -rw-r--r--  |  1 | niklascarlsson | staff |   48 | Jun | 10 | 20:45 | .gitignore        |
+| drwxr-xr-x  |  3 | niklascarlsson | staff |   96 | Aug | 13 | 17:36 | org_mode          |
+| drwxr-xr-x  |  9 | niklascarlsson | staff |  288 | Aug | 13 | 17:36 | vim_for_beginners |
+
+#+BEGIN_SRC elisp :var table=output-values[*.0:-1,8] :results output
+(print table)
+#+END_SRC
+
+#+RESULTS:
+:
+: ("" 0 ".." ".DS_Store" ".git" ".gitignore" "org_mode" "vim_for_beginners")
+
 
 + Select language
 + Define directory
