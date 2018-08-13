@@ -59,6 +59,39 @@ https://orgmode.org/manual/var.html
 :
 : ("" 0 ".." ".DS_Store" ".git" ".gitignore" "org_mode" "vim_for_beginners")
 
+#+NAME: last-value
+#+BEGIN_SRC elisp :var table=output-values[*.0:-1,8] :results var
+(print (last table))
+#+END_SRC
+
+#+RESULTS: last-value
+| vim_for_beginners |
+
+#+NAME: full-path-presentation
+#+BEGIN_SRC sh :var directory=last-value :dir ~/src/presentations/ :results var
+pwd $directory
+#+END_SRC
+
+#+RESULTS:
+: /Users/niklascarlsson/src/presentations
+
+
+#+BEGIN_SRC sh :dir (concat (expand-file-name "~") "/src/presentations/")
+ls
+#+END_SRC
+
+#+RESULTS:
+| org_mode          |
+| vim_for_beginners |
+
+#+BEGIN_SRC sh :var dir=(concat (expand-file-name "~") "/src/presentations/")
+cd $dir
+ls
+#+END_SRC
+
+#+RESULTS:
+| org_mode          |
+| vim_for_beginners |
 
 + Select language
 + Define directory
