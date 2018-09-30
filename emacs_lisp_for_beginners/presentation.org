@@ -1,6 +1,8 @@
 #+TITLE: presentation
 
 * Background
+
+#+BEGIN_NOTES
 Emacs lisp is both one of the most exciting and daunting things about Emacs for
 me. Before starting to explore Emacs I had never encountered or engaged in lisp
 nor in functional programming. So the paradigm was something very non familiar
@@ -10,7 +12,9 @@ This is a an introduction to Emacs lisp, for beginners by an enthusiastic
 beginner. So for anyone that haven't dealt that much with Emacs lisp this might
 be a good start. I thought I would share some of the knowledge that I have
 acquired so far.
+#+END_NOTES
 
+** Build from Vim
 So background, I have been using Emacs since around march this year. I started
 to experiment some with Spacemacs, since I come from a Vim background. But after
 two weeks or so I moved on to Doom Emacs which I have been using since then.
@@ -25,25 +29,31 @@ I was a happy Vim user
 - Picture of the youtube video in question
 #+END_NOTES
 
+** Spacemacs
 [[./images/spacemacs.png]]
 
-#+BEGIN_NOTES
-Insert a picture of Doom
-#+END_NOTES
+** Doom Emacs
 
+[[./images/doom.png]]
+
+#+BEGIN_NOTES
 In the beginning I used Emacs only for taking notes in org-mode and later to do
 my git work with magit. I found that this was a good way to ease myself into
 using Emacs. I could gradually start use it more and more and now this is my
 daily tool.
-
-#+BEGIN_NOTES
-My hacking notebook
 #+END_NOTES
 
-#+BEGIN_NOTES
-Magit buffer
-#+END_NOTES
+** Org-mode
 
+[[./images/org-mode.png]]
+
+** Magit
+
+[[./images/magit.png]]
+
+** Eshell
+
+#+BEGIN_NOTES
 So even though I have acquired some understanding about tweaking and customizing
 Emacs it has mainly been built upon the internal code in Doom and snippets or
 blog posts that I have found on the internet.
@@ -58,9 +68,8 @@ So this summer I switched from only using zsh to also start using eshell. This
 was a conscious decision where one of the driving forces was that since eshell is
 elisp it also has access to all the functions in Emacs and it also means I can
 write some functions of my own to perform shell tasks.
-
-#+BEGIN_NOTES
-Eshell buffer
 #+END_NOTES
+
+[[./images/eshell.png]]
 
 * Emacs Lisp
