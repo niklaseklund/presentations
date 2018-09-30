@@ -1,4 +1,12 @@
-#+TITLE: presentation
+#+TITLE: Elisp for beginners
+#+AUTHOR: Niklas Carlsson
+#+DATE: 14 October 2018
+
+#+OPTIONS: num:nil reveal_control:nil toc:nil
+#+OPTIONS: reveal_title_slide:auto
+#+OPTIONS: title:t author:nil date:t email:nil timestamp:nil
+#+REVEAL_THEME: moon
+#+REVEAL_TRANS: slide
 
 * Background
 
