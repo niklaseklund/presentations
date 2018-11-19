@@ -1,0 +1,26 @@
+* Presentation
+** DONE Org-mode
+CLOSED: [2018-11-19 Mon 14:18]
+
+Describe what Org-mode is by showing how a document looks like and go through the following items
+- How headings look like
+- How lists look like
+- What tables look like
+- What another type of list looks like
+
+You know what, now I am tired of only having the document but not the mode, let's enable it
+
+~My favorite things in Org-mode~
+1) All the automatic expansions
+2) And the nice adjustments
+
+| Commannd          | Action                             |
+|-------------------+------------------------------------|
+| C-Enter           | Create a new heading               |
+| M-Enter           | New item in a list that you are in |
+| Tab heading       | Demotes heading                    |
+| Shift-Tab heading | Promote heading                    |
+
+** TODO Literate programing
+
+...

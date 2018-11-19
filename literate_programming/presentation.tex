@@ -1,0 +1,164 @@
+% Created 2018-11-19 Mon 17:30
+% Intended LaTeX compiler: pdflatex
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{grffile}
+\usepackage{longtable}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage{amssymb}
+\usepackage{capt-of}
+\usepackage{hyperref}
+\author{Niklas Carlsson}
+\date{\today}
+\title{}
+\hypersetup{
+ pdfauthor={Niklas Carlsson},
+ pdftitle={},
+ pdfkeywords={},
+ pdfsubject={},
+ pdfcreator={Emacs 27.0.50 (Org mode 9.1.14)},
+ pdflang={English}}
+\begin{document}
+
+\section*{Investigation}
+\label{sec:orgb877167}
+
+Let's make a fun little investigation. Assume we have some data of a signal and
+we want to make an algorithm that tracks the 1-d signal. This presentation is a
+little bit too short to make a real algorithm and data in so we will fake it
+instead.
+
+\subsection*{Synthesize the data}
+\label{sec:org1e53dcf}
+Let's use some Emacs lisp to generate the ground truth and the estimates for us:
+
+\begin{verbatim}
+  (mapcar (lambda (i)
+            (list i (+ (random 4) (- i 2))))
+          (number-sequence 1 20))
+\end{verbatim}
+
+\begin{verbatim}
+(cons '("Truth" "Estimate") (cons 'hline tbl))
+\end{verbatim}
+
+Let's give the results a name so that we can reference the table later. It's
+good to see the data in the table but I often find that some kind of
+visualization is more powerful. It's too bad I don't know how to plot in
+elisp\ldots{} but I do know how to do it in Python.
+
+\subsection*{Visualize estimate and truth}
+\label{sec:orgf804e1c}
+\begin{verbatim}
+import numpy as np
+import matplotlib
+matplotlib.use('Agg')
+from matplotlib import pyplot as plt
+
+# Convert list to numpy array
+truth = np.asarray(data)[:, 0]
+est = np.asarray(data)[:, 1]
+# Plot
+fig=plt.figure()
+plt.plot(truth, color="g", label="Truth")
+plt.plot(est, marker="x", label="Estimate")
+plt.legend(loc='upper left')
+plt.xlabel("Sample")
+plt.ylabel("Value")
+plt.title("Tracking")
+plt.savefig('.images/est_vs_truth.png')
+'.images/est_vs_truth.png' # return this to org-mode
+\end{verbatim}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.9\linewidth]{.images/est_vs_truth.png}
+\caption{Tracking the true value}
+\end{figure}
+
+Cool, the performance of the fake algorithm is not that bad. I think we can be
+pretty happy with it. let's see if we can gather some more information about
+it's performance.
+
+\subsection*{Examine the performance}
+\label{sec:orgddd036f}
+
+\begin{center}
+\begin{tabular}{rrrr}
+\hline
+Truth & Estimate & Error & Absolute error\\
+\hline
+1 & 1 & 0 & 0\\
+2 & 2 & 0 & 0\\
+3 & 3 & 0 & 0\\
+4 & 4 & 0 & 0\\
+5 & 5 & 0 & 0\\
+6 & 7 & -1 & 1\\
+7 & 8 & -1 & 1\\
+8 & 9 & -1 & 1\\
+9 & 8 & 1 & 1\\
+10 & 8 & 2 & 2\\
+11 & 9 & 2 & 2\\
+12 & 11 & 1 & 1\\
+13 & 11 & 2 & 2\\
+14 & 13 & 1 & 1\\
+15 & 14 & 1 & 1\\
+16 & 16 & 0 & 0\\
+17 & 15 & 2 & 2\\
+18 & 17 & 1 & 1\\
+19 & 20 & -1 & 1\\
+20 & 21 & -1 & 1\\
+\hline
+RMSE & 1.140175425099138 &  & \\
+\hline
+\end{tabular}
+
+\end{center}
+
+In order to get the values from the other table I am using \href{https://orgmode.org/manual/References.html\#index-remote-references-352}{remote references}. To
+refer to the values of the other table.
+
+Table formulas uses \texttt{Emacs calc} syntax by default. I have a hard time not
+thinking of \texttt{Windows calc} when I hear this name. But this is something
+different.
+
+Tables also supports \texttt{Emacs lisp} so we can use that to calculate the absolute
+error. Finally it would be nice to get a kpi like \texttt{rmse} to have one number for
+the performance of the algorithm. Since that equation would be quite long in
+Emacs lisp maybe it's time to try something else.
+
+We can actually pass the data from the table into other code blocks, which is a
+supercool. We can therefore create a block with Python code which we pass values
+into in order to be able to calculate the \href{https://en.wikipedia.org/wiki/Root-mean-square\_deviation}{rmse}
+
+A second try
+
+
+\subsection*{Describe the flow}
+\label{sec:org7cb3327}
+
+I would like to describe the flow better. It would be great if we could
+visualize it, perhaps in a flow chart.
+
+
+
+
+
+\subsection*{Export}
+\label{sec:org4fe90be}
+\subsection*{Improve}
+\label{sec:orge848216}
+
+
+
+\subsection*{Appendix}
+\label{sec:org65ccf9d}
+
+I feel that the Emacs calculator requires some more data
+\end{document}

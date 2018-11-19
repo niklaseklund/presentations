@@ -1,0 +1,208 @@
+* Literate programming in Org-mode
+** DONE Org-mode
+CLOSED: [2018-11-19 Mon 14:37]
+
+The first thing I will do is to show how an ~.org~ file looks in
+fundamental-mode. It's actually nothing more than a text file.
+
+*** Content
+
+Here are some of the basics we can have a look at:
+
+- Headings, how to create them and change them
+- What kinds of lists are supported
+- How tables look like
+- TODO:s
+
+
+**** My favorite things
+1) That it's just plain text files
+2) It's automatic adjustments
+
+**** Commands
+
+Good to know commands in Org-mode
+
+| Commannd          | Action          |
+|-------------------+-----------------|
+| Tab heading       | Demotes heading |
+| Shift-Tab heading | Promote heading |
+| C-Enter           |                 |
+| M-Enter           |                 |
+
+** Literate programming
+
+
+** Arguments
+** Sessions
+** Tangling
+** Note taking
+** Investigation
+
+Let's make a fun little investigation. Assume we have some data of a signal and
+we want to make an algorithm that tracks the 1-d signal. This presentation is a
+little bit too short to make a real algorithm and data in so we will fake it
+instead.
+
+*** Synthesize the data
+Let's use some Emacs lisp to generate the ground truth and the estimates for us:
+
+#+BEGIN_SRC emacs-lisp :results value table :post addhdr(*this*)
+  (mapcar (lambda (i)
+            (list i (+ (random 4) (- i 2))))
+          (number-sequence 1 20))
+#+END_SRC
+
+#+NAME: est-truth-data
+#+RESULTS:
+| Truth | Estimate |
+|-------+----------|
+|     1 |        1 |
+|     2 |        2 |
+|     3 |        3 |
+|     4 |        4 |
+|     5 |        5 |
+|     6 |        7 |
+|     7 |        8 |
+|     8 |        9 |
+|     9 |        8 |
+|    10 |        8 |
+|    11 |        9 |
+|    12 |       11 |
+|    13 |       11 |
+|    14 |       13 |
+|    15 |       14 |
+|    16 |       16 |
+|    17 |       15 |
+|    18 |       17 |
+|    19 |       20 |
+|    20 |       21 |
+
+#+name: addhdr
+#+begin_src emacs-lisp :var tbl=""
+(cons '("Truth" "Estimate") (cons 'hline tbl))
+#+end_src
+
+Let's give the results a name so that we can reference the table later. It's
+good to see the data in the table but I often find that some kind of
+visualization is more powerful. It's too bad I don't know how to plot in
+elisp... but I do know how to do it in Python.
+
+*** Visualize estimate and truth
+#+BEGIN_SRC python :session my-plot-session :var data=est-truth-data :results file :exports both
+import numpy as np
+import matplotlib
+matplotlib.use('Agg')
+from matplotlib import pyplot as plt
+
+# Convert list to numpy array
+truth = np.asarray(data)[:, 0]
+est = np.asarray(data)[:, 1]
+# Plot
+fig=plt.figure()
+plt.plot(truth, color="g", label="Truth")
+plt.plot(est, marker="x", label="Estimate")
+plt.legend(loc='upper left')
+plt.xlabel("Sample")
+plt.ylabel("Value")
+plt.title("Tracking")
+plt.savefig('.images/est_vs_truth.png')
+'.images/est_vs_truth.png' # return this to org-mode
+#+END_SRC
+
+#+CAPTION: Tracking the true value
+#+RESULTS:
+[[file:.images/est_vs_truth.png]]
+
+Cool, the performance of the fake algorithm is not that bad. I think we can be
+pretty happy with it. let's see if we can gather some more information about
+it's performance.
+
+*** Examine the performance
+
+|------------------+-------------------+-------+----------------|
+|            Truth |          Estimate | Error | Absolute error |
+|------------------+-------------------+-------+----------------|
+|                1 |                 1 |     0 |              0 |
+|                2 |                 2 |     0 |              0 |
+|                3 |                 3 |     0 |              0 |
+|                4 |                 4 |     0 |              0 |
+|                5 |                 5 |     0 |              0 |
+|                6 |                 7 |    -1 |              1 |
+|                7 |                 8 |    -1 |              1 |
+|                8 |                 9 |    -1 |              1 |
+|                9 |                 8 |     1 |              1 |
+|               10 |                 8 |     2 |              2 |
+|               11 |                 9 |     2 |              2 |
+|               12 |                11 |     1 |              1 |
+|               13 |                11 |     2 |              2 |
+|               14 |                13 |     1 |              1 |
+|               15 |                14 |     1 |              1 |
+|               16 |                16 |     0 |              0 |
+|               17 |                15 |     2 |              2 |
+|               18 |                17 |     1 |              1 |
+|               19 |                20 |    -1 |              1 |
+|               20 |                21 |    -1 |              1 |
+|------------------+-------------------+-------+----------------|
+| Number of values |                20 |       |                |
+|       Mean error |               0.9 |       |                |
+|             RMSE | 1.140175425099138 |       |                |
+|------------------+-------------------+-------+----------------|
+#+TBLFM: @2$1..@21$1='(identity remote(est-truth-data, @@#$1))::@2$2..@21$2='(identity remote(est-truth-data, @@#$2))::@2$3..@21$3=$1-$2::@2$4..@21$4='(abs (- $1 $2));N::@22$2='(length (list @2$4..@21$4));N::@23$2='(org-sbe "mean" (error @2$4..@21$4))::@24$2='(org-sbe "rmse" (estimate @2$1..@21$1) (truth @2$2..@21$2))
+
+In order to get the values from the other table I am using [[https://orgmode.org/manual/References.html#index-remote-references-352][remote references]]. To
+refer to the values of the other table.
+
+Table formulas uses ~Emacs calc~ syntax by default. I have a hard time not
+thinking of ~Windows calc~ when I hear this name. But this is something
+different.
+
+Tables also supports ~Emacs lisp~ so we can use that to calculate the absolute
+error. Finally it would be nice to get a kpi like ~rmse~ to have one number for
+the performance of the algorithm. Since that equation would be quite long in
+Emacs lisp maybe it's time to try something else.
+
+We can actually pass the data from the table into other code blocks, which is a
+supercool. We can therefore create a block with Python code which we pass values
+into in order to be able to calculate the [[https://en.wikipedia.org/wiki/Root-mean-square_deviation][rmse]]
+
+#+NAME: rmse
+#+BEGIN_SRC python :var estimate=0 :var truth=0 :exports none
+import numpy as np
+error = np.asarray(estimate) - np.asarray(truth)
+result = np.sqrt(np.mean(np.square(error)))
+return result
+#+END_SRC
+
+#+NAME: mean
+#+BEGIN_SRC elisp :var error=0 :exports none
+(let ((num-values (length error)))
+  (/ (seq-reduce '+ error 0.0) num-values))
+#+END_SRC
+
+A second try
+
+
+*** Describe the flow
+
+I would like to describe the flow better. It would be great if we could
+visualize it, perhaps in a flow chart.
+
+*** Export
+*** Improve
+
+
+
+*** Appendix
+
+I feel that the Emacs calculator requires some more data
+
+** Summary
+#+OPTIONS: num:nil reveal_control:nil toc:nil
+#+OPTIONS: reveal_title_slide:nil
+#+REVEAL_THEME: moon
+#+REVEAL_TRANS: slide
+
+*** What have we learnt?
+
+ ps
