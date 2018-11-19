@@ -387,3 +387,32 @@ predicate.
 
 (qs '(4 7 2 3 8 5 9))
 #+END_SRC
+
+~Example: Reverse the content of a list~
+#+BEGIN_SRC elisp
+(defun reverse-list (input)
+  (if (null input)
+      ;; return an empty list
+      '()
+    ;; put the first element last and call the function again
+    (append (reverse-list (cdr input)) (list (car input)))))
+
+(reverse-list '(katarina kiti niklas 3 654))
+
+#+END_SRC
+
+#+RESULTS:
+| 654 | 3 | niklas | kiti | katarina |
+
+Without ~list~ it yields the error ~wrong type argument: sequence 654~, since
+the last element is not a list append does not work?
+#+BEGIN_SRC elisp :results output
+(defun reverse-list2 (input)
+  (if (null input)
+      ;; return an empty list
+      '()
+    ;; put the first element last and call the function again
+    (append (reverse-list2 (cdr input)) (car input))))
+
+(print (reverse-list2 '(katarina kiti niklas 3 654)))
+#+END_SRC
