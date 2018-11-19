@@ -188,10 +188,62 @@ A second try
 I would like to describe the flow better. It would be great if we could
 visualize it, perhaps in a flow chart.
 
+#+BEGIN_SRC plantuml :file .images/flow.png :export both
+@startuml
+class Car
+
+Driver - Car : drives >
+Car *- Wheel : have 4 >
+Car -- Person : < owns
+
+@enduml
+#+END_SRC
+
+#+RESULTS:
+[[file:.images/flow.png]]
+
+Having problems with executing plantUML on Arch Linux
+
+Make sure that the ~jre-opendjk-headless~ is installed
+#+BEGIN_SRC sh
+pacman -Ss openjdk | grep "headless"
+#+END_SRC
+
+#+RESULTS:
+| extra/jre-openjdk-headless   | 11.0.1.u13-2    | [installed] |          |         |             |
+| OpenJDK                      | Java            |          11 | headless | runtime | environment |
+| extra/jre10-openjdk-headless | 10.0.2.u13-1    |             |          |         |             |
+| OpenJDK                      | Java            |          10 | headless | runtime | environment |
+| extra/jre7-openjdk-headless  | 7.u171_2.6.13-1 |             |          |         |             |
+| OpenJDK                      | Java            |           7 | headless | runtime | environment |
+| extra/jre8-openjdk-headless  | 8.u192-1        |             |          |         |             |
+| OpenJDK                      | Java            |           8 | headless | runtime | environment |
+
+Next check the runtime environment if that is set, https://wiki.archlinux.org/index.php/java#Installation
+#+BEGIN_SRC sh
+arch-linux-java status
+#+END_SRC
+
+If result is no default environment set but Available environment is
+java-11-openjdk then:
+
+#+BEGIN_SRC sh
+sudo arch-linux-java set java-11-openjdk
+#+END_SRC
+
 *** Export
 *** Improve
 
-
+#+BEGIN_SRC elisp
+(defun org-latex-export-to-pdf-and-open ()
+"Export current buffer to LaTeX then process through to PDF and open the
+resulting file"
+  (interactive)
+  (let* ((file-name (file-name-nondirectory buffer-file-name))
+        (name (file-name-sans-extension file-name)))
+  (org-latex-export-to-pdf)
+  (find-file (concat name ".pdf"))))
+#+END_SRC
 
 *** Appendix
 
