@@ -95,14 +95,429 @@ get exactly this. So I will call the function ~M-x org-noter~ and I
 automatically get a split view with my notes and with the actual pdf file.
 [[file:~/org/hacking_notebook.org::*The%20if%20Special%20Form][An introduction to Elisp: The if Special Form]]
 
+Even though linking to other files is useful I am again feeling that I am
+lacking the context sometimes. Sure it's useful if I want to reference the whole
+file but not if there is a subpart of it. Luckily there is a cool solution to
+that which involves ~org-capture~
+** Docker
+
+I don't build Docker images that often so it would be really useful if I could
+document the procedure both for later reference. On Arch Linux I don't
+have [[https://www.docker.com/][Docker]] installed so that is the first step.
+
+*** Installation
+
+I found docker related instructions on the [[https://wiki.archlinux.org/index.php/docker][arch wiki]]. So first we install docker
+with the package manager:
+
+#+BEGIN_SRC sh
+sudo pacman -S docker
+#+END_SRC
+
+Next we start the docker service
+#+BEGIN_SRC sh :dir "/sudo::" :results none
+sudo systemctl start docker
+#+END_SRC
+
+Now we want to make sure that the docker can be run as expected. I will use the
+~hello-world~ image to try that out
+#+BEGIN_SRC sh :results raw
+docker run hello-world
+#+END_SRC
+
+Unfortunately this gives an error with the following message:
+#+BEGIN_EXAMPLE
+docker: Got permission denied while trying to connect to the Docker daemon
+socket at unix:///var/run/docker.sock: Post
+http://%2Fvar%2Frun%2Fdocker.sock/v1.39/containers/create: dial unix
+/var/run/docker.sock: connect: permission denied.
+See 'docker run --help'.
+#+END_EXAMPLE
+
+[[https://techoverflow.net/2017/03/01/solving-docker-permission-denied-while-trying-to-connect-to-the-docker-daemon-socket/][This]] article discusses the same problem and it seems like it can be solved if I
+get evalated rights. That can be achieved by letting me be part of the group docker.
+I currently belong to these groups:
+#+BEGIN_SRC sh
+groups niklascarlsson
+#+END_SRC
+
+#+RESULTS:
+: vboxsf niklascarlsson
+
+But I want to belong to the docker group as well, so I will need to run a
+command to achieve that. It will require me to use sudo which we can achieve
+thanks to ~TRAMP~
+#+BEGIN_SRC sh :dir "/sudo::""
+sudo gpasswd -a niklascarlsson docker
+#+END_SRC
+
+#+RESULTS:
+: Adding user niklascarlsson to group docker
+
+Let's verify that it worked:
+#+BEGIN_SRC sh
+groups niklascarlsson
+#+END_SRC
+
+#+RESULTS:
+: vboxsf docker niklascarlsson
+
+In order for it to really take effect we need to either logout or reboot. So I
+will reboot in order to get my permissions. Now we are back and can run the
+~hello-world~ again:
+#+BEGIN_SRC sh :results output
+docker run hello-world
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+
+Hello from Docker!
+This message shows that your installation appears to be working correctly.
+
+To generate this message, Docker took the following steps:
+ 1. The Docker client contacted the Docker daemon.
+ 2. The Docker daemon pulled the "hello-world" image from the Docker Hub.
+    (amd64)
+ 3. The Docker daemon created a new container from that image which runs the
+    executable that produces the output you are currently reading.
+ 4. The Docker daemon streamed that output to the Docker client, which sent it
+    to your terminal.
+
+To try something more ambitious, you can run an Ubuntu container with:
+ $ docker run -it ubuntu bash
+
+Share images, automate workflows, and more with a free Docker ID:
+ https://hub.docker.com/
+
+For more examples and ideas, visit:
+ https://docs.docker.com/get-started/
+
+#+end_example
+
+Perfect, we have a working docker installation. Now let's build ourselves an image.
+
+*** Build a Python3 image
+:PROPERTIES:
+:header-args: :results output :mkdirp yes
+:END:
+
+I would like to build a docker image with ~Python3~ installed so that I can run
+my python3 code. I got the inspiration from this [[https://blog.realkinetic.com/building-minimal-docker-containers-for-python-applications-37d0272c52f3][minimal docker image]] example.
+
+**** Requirements
+
+We need to specify the requirements that we are demanding:
+#+BEGIN_SRC text :tangle minimal_python_docker/requirements.txt
+Flask>=0.12,<0.13
+flask-restplus>=0.9.2,<0.10
+Flask-SSLify>=0.1.5,<0.2
+Flask-Admin>=1.4.2,<1.5
+gunicorn>=19,<20
+#+END_SRC
+
+By using the ~mkdirp~ setting I am able to automatically create the needed
+directory structure.
+
+**** Dockerfile
+
+The ~Dockerfile~
+#+BEGIN_SRC text :tangle minimal_python_docker/Dockerfile
+FROM python:3.6-alpine
+
+COPY requirements.txt /
+
+RUN pip install -r /requirements.txt
+
+COPY src/ /app
+WORKDIR /app
+
+CMD ["python", "app.py"]
+#+END_SRC
+
+**** The application
+
+#+BEGIN_SRC python :tangle minimal_python_docker/src/app.py
+for i in range(20):
+    print "i has the value " + str(i)
+#+END_SRC
+
+**** Create the image
+
+#+BEGIN_SRC sh :dir minimal_python_docker
+docker build -t niklascarlsson/minimal_python3 .
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+Sending build context to Docker daemon  4.608kB
+Step 1/6 : FROM python:3.6-alpine
+3.6-alpine: Pulling from library/python
+4fe2ade4980c: Pulling fs layer
+7cf6a1d62200: Pulling fs layer
+bd5bf1aa7305: Pulling fs layer
+73e1cfb346e5: Pulling fs layer
+1e70e0bfa6e9: Pulling fs layer
+73e1cfb346e5: Waiting
+1e70e0bfa6e9: Waiting
+7cf6a1d62200: Verifying Checksum
+7cf6a1d62200: Download complete
+4fe2ade4980c: Verifying Checksum
+4fe2ade4980c: Download complete
+73e1cfb346e5: Verifying Checksum
+73e1cfb346e5: Download complete
+4fe2ade4980c: Pull complete
+7cf6a1d62200: Pull complete
+1e70e0bfa6e9: Verifying Checksum
+1e70e0bfa6e9: Download complete
+bd5bf1aa7305: Verifying Checksum
+bd5bf1aa7305: Download complete
+bd5bf1aa7305: Pull complete
+73e1cfb346e5: Pull complete
+1e70e0bfa6e9: Pull complete
+Digest: sha256:efdc898dcd3934564489a933f13a51f136960e63d779ca88750cfe07add65c22
+Status: Downloaded newer image for python:3.6-alpine
+ ---> 1d981af1e3b4
+Step 2/6 : COPY requirements.txt /
+ ---> a75afff4ca55
+Step 3/6 : RUN pip install -r /requirements.txt
+ ---> Running in cd7546f2498a
+Collecting Flask<0.13,>=0.12 (from -r /requirements.txt (line 1))
+  Downloading https://files.pythonhosted.org/packages/2e/48/f1936dadac2326b3d73f2fe0a964a87d16be16eb9d7fc56f09c1bea3d17c/Flask-0.12.4-py2.py3-none-any.whl (81kB)
+Collecting flask-restplus<0.10,>=0.9.2 (from -r /requirements.txt (line 2))
+  Downloading https://files.pythonhosted.org/packages/e3/cf/f17666fe32180cc6f06ed9ff3dd18732a77919f04e47d4661c06cc97c49c/flask_restplus-0.9.2-py2.py3-none-any.whl (903kB)
+Collecting Flask-SSLify<0.2,>=0.1.5 (from -r /requirements.txt (line 3))
+  Downloading https://files.pythonhosted.org/packages/6e/98/54f2ffaf886d25eb1591cfb534c04cbf983236d657d58d180fd9ccbb5e7f/Flask-SSLify-0.1.5.tar.gz
+Collecting Flask-Admin<1.5,>=1.4.2 (from -r /requirements.txt (line 4))
+  Downloading https://files.pythonhosted.org/packages/74/23/a411ce6bca79f30698fbe1d1a59c4789919bdb93fb5385bb24ea07ea7674/Flask-Admin-1.4.2.tar.gz (922kB)
+Collecting gunicorn<20,>=19 (from -r /requirements.txt (line 5))
+  Downloading https://files.pythonhosted.org/packages/8c/da/b8dd8deb741bff556db53902d4706774c8e1e67265f69528c14c003644e6/gunicorn-19.9.0-py2.py3-none-any.whl (112kB)
+Collecting itsdangerous>=0.21 (from Flask<0.13,>=0.12->-r /requirements.txt (line 1))
+  Downloading https://files.pythonhosted.org/packages/76/ae/44b03b253d6fade317f32c24d100b3b35c2239807046a4c953c7b89fa49e/itsdangerous-1.1.0-py2.py3-none-any.whl
+Collecting click>=2.0 (from Flask<0.13,>=0.12->-r /requirements.txt (line 1))
+  Downloading https://files.pythonhosted.org/packages/fa/37/45185cb5abbc30d7257104c434fe0b07e5a195a6847506c074527aa599ec/Click-7.0-py2.py3-none-any.whl (81kB)
+Collecting Jinja2>=2.4 (from Flask<0.13,>=0.12->-r /requirements.txt (line 1))
+  Downloading https://files.pythonhosted.org/packages/7f/ff/ae64bacdfc95f27a016a7bed8e8686763ba4d277a78ca76f32659220a731/Jinja2-2.10-py2.py3-none-any.whl (126kB)
+Collecting Werkzeug>=0.7 (from Flask<0.13,>=0.12->-r /requirements.txt (line 1))
+  Downloading https://files.pythonhosted.org/packages/20/c4/12e3e56473e52375aa29c4764e70d1b8f3efa6682bef8d0aae04fe335243/Werkzeug-0.14.1-py2.py3-none-any.whl (322kB)
+Collecting aniso8601>=0.82 (from flask-restplus<0.10,>=0.9.2->-r /requirements.txt (line 2))
+  Downloading https://files.pythonhosted.org/packages/69/9b/f2ae61c0c90181b62e15ca09d283d2aab42c7c2c3bbd7c548dd0cfd8bf3e/aniso8601-4.0.1-py2.py3-none-any.whl
+Collecting pytz (from flask-restplus<0.10,>=0.9.2->-r /requirements.txt (line 2))
+  Downloading https://files.pythonhosted.org/packages/f8/0e/2365ddc010afb3d79147f1dd544e5ee24bf4ece58ab99b16fbb465ce6dc0/pytz-2018.7-py2.py3-none-any.whl (506kB)
+Collecting six>=1.3.0 (from flask-restplus<0.10,>=0.9.2->-r /requirements.txt (line 2))
+  Downloading https://files.pythonhosted.org/packages/67/4b/141a581104b1f6397bfa78ac9d43d8ad29a7ca43ea90a2d863fe3056e86a/six-1.11.0-py2.py3-none-any.whl
+Collecting jsonschema (from flask-restplus<0.10,>=0.9.2->-r /requirements.txt (line 2))
+  Downloading https://files.pythonhosted.org/packages/77/de/47e35a97b2b05c2fadbec67d44cfcdcd09b8086951b331d82de90d2912da/jsonschema-2.6.0-py2.py3-none-any.whl
+Collecting wtforms (from Flask-Admin<1.5,>=1.4.2->-r /requirements.txt (line 4))
+  Downloading https://files.pythonhosted.org/packages/9f/c8/dac5dce9908df1d9d48ec0e26e2a250839fa36ea2c602cc4f85ccfeb5c65/WTForms-2.2.1-py2.py3-none-any.whl (166kB)
+Collecting MarkupSafe>=0.23 (from Jinja2>=2.4->Flask<0.13,>=0.12->-r /requirements.txt (line 1))
+  Downloading https://files.pythonhosted.org/packages/ac/7e/1b4c2e05809a4414ebce0892fe1e32c14ace86ca7d50c70f00979ca9b3a3/MarkupSafe-1.1.0.tar.gz
+Building wheels for collected packages: Flask-SSLify, Flask-Admin, MarkupSafe
+  Running setup.py bdist_wheel for Flask-SSLify: started
+  Running setup.py bdist_wheel for Flask-SSLify: finished with status 'done'
+  Stored in directory: /root/.cache/pip/wheels/f6/be/7c/b262753258e34b3f07ec47973038f199c34678985b9614a50d
+  Running setup.py bdist_wheel for Flask-Admin: started
+  Running setup.py bdist_wheel for Flask-Admin: finished with status 'done'
+  Stored in directory: /root/.cache/pip/wheels/49/d4/b3/8edf3699b2ea1c5e32fd4cce5ae3395a3aa198399fc82f9c46
+  Running setup.py bdist_wheel for MarkupSafe: started
+  Running setup.py bdist_wheel for MarkupSafe: finished with status 'done'
+  Stored in directory: /root/.cache/pip/wheels/81/23/64/51895ea52825dc116a55f37043f49be0939bcf603de54e5cde
+Successfully built Flask-SSLify Flask-Admin MarkupSafe
+Installing collected packages: itsdangerous, click, MarkupSafe, Jinja2, Werkzeug, Flask, aniso8601, pytz, six, jsonschema, flask-restplus, Flask-SSLify, wtforms, Flask-Admin, gunicorn
+Successfully installed Flask-0.12.4 Flask-Admin-1.4.2 Flask-SSLify-0.1.5 Jinja2-2.10 MarkupSafe-1.1.0 Werkzeug-0.14.1 aniso8601-4.0.1 click-7.0 flask-restplus-0.9.2 gunicorn-19.9.0 itsdangerous-1.1.0 jsonschema-2.6.0 pytz-2018.7 six-1.11.0 wtforms-2.2.1
+Removing intermediate container cd7546f2498a
+ ---> 363588b44974
+Step 4/6 : COPY src/ /app
+ ---> 8a4ebf7146c3
+Step 5/6 : WORKDIR /app
+ ---> Running in 3ae724d0f30e
+Removing intermediate container 3ae724d0f30e
+ ---> 31a745587249
+Step 6/6 : CMD ["python", "app.py"]
+ ---> Running in 34c9a66cde77
+Removing intermediate container 34c9a66cde77
+ ---> b3db662ee473
+Successfully built b3db662ee473
+Successfully tagged niklascarlsson/minimal_python3:latest
+#+end_example
+
+First we verify that the image is now available among the docker images
+#+BEGIN_SRC sh
+docker images
+#+END_SRC
+
+#+RESULTS:
+: REPOSITORY                       TAG                 IMAGE ID            CREATED             SIZE
+: niklascarlsson/minimal_python3   latest              b3db662ee473        14 seconds ago      101MB
+: python                           3.6-alpine          1d981af1e3b4        4 days ago          74.3MB
+: hello-world                      latest              4ab4c602aa5e        2 months ago        1.84kB
+
+Nice, let's try the image
+#+BEGIN_SRC sh :session org-docker-minimal-error
+docker run niklascarlsson/minimal_python3
+#+END_SRC
+
+#+RESULTS:
+:
+: File "app.py", line 2
+:     print "i has the value " + str(i)
+:                            ^
+: SyntaxError: invalid syntax
+
+**** Oh no...
+
+There is an issue. The python code we wrote where not compatible, let's
+go back and fix that
+#+BEGIN_SRC python :tangle minimal_python_docker/src/app.py
+for i in range(20):
+    print("i has the value " + str(i))
+#+END_SRC
+
+Let's rebuild
+#+BEGIN_SRC sh :dir minimal_python_docker
+docker build -t niklascarlsson/minimal_python3 .
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+Sending build context to Docker daemon  4.608kB
+Step 1/6 : FROM python:3.6-alpine
+ ---> 1d981af1e3b4
+Step 2/6 : COPY requirements.txt /
+ ---> Using cache
+ ---> a75afff4ca55
+Step 3/6 : RUN pip install -r /requirements.txt
+ ---> Using cache
+ ---> 363588b44974
+Step 4/6 : COPY src/ /app
+ ---> 0de70189b473
+Step 5/6 : WORKDIR /app
+ ---> Running in c55b43d214b6
+Removing intermediate container c55b43d214b6
+ ---> 2f19f74f4b84
+Step 6/6 : CMD ["python", "app.py"]
+ ---> Running in cb1badd5b6d9
+Removing intermediate container cb1badd5b6d9
+ ---> 50175d809b47
+Successfully built 50175d809b47
+Successfully tagged niklascarlsson/minimal_python3:latest
+#+end_example
+
+And test again:
+#+BEGIN_SRC sh :session org-docker-minimal-error
+docker run niklascarlsson/minimal_python3
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+i has the value 0
+i has the value 1
+i has the value 2
+i has the value 3
+i has the value 4
+i has the value 5
+i has the value 6
+i has the value 7
+i has the value 8
+i has the value 9
+i has the value 10
+i has the value 11
+i has the value 12
+i has the value 13
+i has the value 14
+i has the value 15
+i has the value 16
+i has the value 17
+i has the value 18
+i has the value 19
+#+end_example
+
+Great we solved the issue!
+
+*** Knock it up a notch
+:PROPERTIES:
+:header-args: :var docker_image="niklascarlsson/minimal_python3"
+:END:
+
+#+BEGIN_SRC sh :session org-docker-minimal-error :results none
+docker run -it $docker_image /bin/sh
+#+END_SRC
+
+#+BEGIN_SRC sh :results table :post remove-first-line(tbl=*this*) :exports both
+docker ps
+#+END_SRC
+
+#+NAME: running-docker-images
+#+RESULTS:
+| 9fd1424b4283 | niklascarlsson/minimal_python3 | /bin/sh | About | an | hour | ago | Up | About | an | hour | boring_hermann |
+| 9fd1424b4283 | niklascarlsson/minimal_python2 | /bin/sh | About | an | hour | ago | Up | About | an | hour | fake_nick      |
+
+We can start with removing the first line that doesn't make sense
+#+NAME: remove-first-line
+#+BEGIN_SRC elisp :var tbl=""
+(cdr tbl)
+#+END_SRC
+
+#+BEGIN_SRC elisp :var tbl=running-docker-images :results output
+(while tbl
+  (print (cdr (cdr (car tbl))))
+  (setq tbl (cdr tbl)))
+#+END_SRC
+
+#+RESULTS:
+:
+: ("/bin/sh" "About" "an" "hour" "ago" "Up" "About" "an" "hour" "boring_hermann")
+:
+: ("/bin/sh" "About" "an" "hour" "ago" "Up" "About" "an" "hour" "fake_nick")
+
+#+NAME: nick-name
+#+BEGIN_SRC elisp :var tbl=running-docker-images :post set-image-nick-name(name=*this*) :results silent
+(let ((elements nil)
+      (name nil)
+      (nick-name nil))
+  (while tbl
+    (setq elements (car tbl))
+    (when (remove-if-not (lambda (element)  (string-match docker_image element)) elements)
+      (setq nick-name (last elements)))
+    (setq tbl (cdr tbl)))
+  nick-name)
+#+END_SRC
+
+#+NAME: set-image-nick-name
+#+BEGIN_SRC elisp :var name="" :results none
+(setq-local docker-run-name (format "/docker:%s:/" (car name)))
+#+END_SRC
+
+#+BEGIN_SRC sh :session my-docker-insider :dir (message docker-run-name) :results output
+ls
+#+END_SRC
+
+#+RESULTS:
+:
+: $ [1;34mapp[m               [1;34mhome[m              [1;34mproc[m              [1;34msbin[m              [1;34musr[m
+: [1;34mbin[m               [1;34mlib[m               [0;0mrequirements.txt[m  [1;34msrv[m               [1;34mvar[m
+: [1;34mdev[m               [1;34mmedia[m             [1;34mroot[m              [1;34msys[m
+: [1;34metc[m               [1;34mmnt[m               [1;34mrun[m               [1;34mtmp[m
+
+#+BEGIN_SRC sh :session my-docker-insider :results output
+cat requirements.txt
+#+END_SRC
+
+#+RESULTS:
+:
+: $ Flask>=0.12,<0.13
+: =0.9.2,<0.10
+: =0.1.5,<0.2
+: =1.4.2,<1.5
+: =19,<20
+
 ** Investigation
 #+LaTeX_HEADER: \usepackage{minted}
 #+LaTeX_HEADER: \usemintedstyle{paraiso-light}
 Let's make a fun little investigation. Assume we have some data of a signal and
 we want to make an algorithm that tracks the 1-d signal. This presentation is a
 little bit too short to make a real algorithm and data in so we will fake it
-instead.
-
+instead
 *** Synthesize the data
 Let's use some Emacs lisp to generate the ground truth and the estimates for us:
 
@@ -429,7 +844,7 @@ I feel that the Emacs calculator should get some more attention.
 
 ** Summary
 #+OPTIONS: num:nil reveal_control:nil toc:nil
-#+OPTIONS: reveal_title_slide:nil
+#+OPTIONS: reveal_title_slide:nil reveal_slide_number:nil
 #+REVEAL_THEME: moon
 #+REVEAL_TRANS: slide
 
