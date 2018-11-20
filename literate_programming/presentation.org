@@ -30,8 +30,47 @@ Good to know commands in Org-mode
 | C-Enter           |                 |
 | M-Enter           |                 |
 
-** TODO Literate programming
+** DONE Literate programming
+CLOSED: [2018-11-20 Tue 20:39]
 
+When I started to use Emacs I found the talk from ~Howard Abrams~, [[https://www.youtube.com/watch?v=dljNabciEGg][Literate
+Devops with Emacs]], in which he talked about the art of literate programming.
+Howard is an inspiration for me in general since I often find he has some novel
+and well thought through ideas.
+
+He has another blog post, [[http://www.howardism.org/Technical/Emacs/literate-programming-tutorial.html][introduction to Literate Programming]], which I was very
+inspired when writing this post. I will try to make it my own take on his post
+since I will focus on the aspects that I currently use org-mode for when it
+comes to literate programming.
+
+[[https://en.wikipedia.org/wiki/Literate_programming][Literate programming]] for me is the possibility to mix text and code. I think the
+thought of having code to be self explanatory as much is possible is good, and
+only add comments when they are actually meaningful. But that goes for the code
+that I share with others. For my own understanding notes are very valuable. I
+like to document what I am doing and trying. Cause there might be sometime soon
+that I need to redo something and it's also valuable if I want to later explain
+how something work to somebody else.
+
+
+*** Babel
+One way of indulging into literate programming is to utilize [[https://orgmode.org/worg/org-contrib/babel/][Babel, active code
+in Org-mode]]. This makes it possible to create code blocks that can be mixed with
+regular text. For anyone that has tried out these python notebooks might be
+familiar with this.
+
+One of the benefits of babel is that it supports many languages and they can all
+be included within the same org document. For me personally these languages
+includes ~C++~, ~Python~, ~Shell~ and ~Elisp~. Since I am not an expert in any
+of these languages I often end up in situations where I want to experiment and
+document my progress it's great that they all can be used within the same tool.
+Another great benefit is that org documents are plain text documents they are
+easy to version control and are safe proof for the future.
+
+*** A
+
+We can create a babel block very easily with ~<s~ followed by ~TAB~
+
+*** B
 #+BEGIN_SRC sh
 echo "hello there!"
 #+END_SRC
@@ -67,12 +106,39 @@ print("hello there")
 #+RESULTS:
 : hello there
 
-#+BEGIN_QUOTE
-Org returns the contents of the standard output stream as text results.
-#+END_QUOTE
+*** C
 
-** TODO Tweak
-** TODO Chain
+We are of course not only limited to perform simple operations like
+~hello-world~. Here is an example using the ~Eigen~ library and the ~c++17~ compiler.
+
+#+BEGIN_SRC C++ :flags '("-I ~/Dropbox/Code/Eigen" "-std=c++17") :results output
+#include <iostream>
+#include <Eigen/Dense>
+using namespace Eigen;
+using namespace std;
+int main()
+{
+  Matrix3d m = Matrix3d::Random();
+  m = (m + Matrix3d::Constant(1.2)) * 50;
+  cout << "m =" << endl << m << endl;
+  Vector3d v(1,2,3);
+
+  cout << "m * v =" << endl << m * v << endl;
+}
+#+END_SRC
+
+#+RESULTS:
+: m =
+: 94.0188  89.844 43.5223
+: 49.4383 101.165  86.823
+: 88.3099 29.7551 37.7775
+: m * v =
+: 404.274
+: 512.237
+: 261.153
+
+** DONE Chain
+CLOSED: [2018-11-20 Tue 20:23]
 
 Mixing text and blocks of code seems to work great from the examples so far.
 This block works as well but what would happen if we for our own understandings
@@ -147,7 +213,8 @@ print("The sum of the numbers is: " + str(calculate_sum(numbers)))
 #+RESULTS:
 : The sum of the numbers is: 190
 
-** TODO Compose
+** DONE Compose
+CLOSED: [2018-11-20 Tue 20:30]
 
 Chaining blocks through ~sessions~ as we saw where useful for some types of
 languages like ~python~ and ~shells~. But that is not the only way. For me it
@@ -179,6 +246,44 @@ print("The sum of the numbers is: " + str(calculate_sum(numbers)))
 
 #+RESULTS:
 : The sum of the numbers is: 190
+
+*** B
+
+But we can also create blocks which returns something simple like a value and
+use that in the other code
+#+NAME: python-max-numbers
+#+BEGIN_SRC python
+return 30
+#+END_SRC
+
+#+BEGIN_SRC python :results output :noweb yes
+<<python-calc>>
+numbers = [x for x in range(<<python-max-numbers()>>)]
+print("The sum of the numbers is: " + str(calculate_sum(numbers)))
+#+END_SRC
+
+#+RESULTS:
+: The sum of the numbers is: 435
+
+*** C
+
+Why not mix languages as well, ~python~ and ~elisp~ working together
+#+NAME: elisp-max-numbers
+#+BEGIN_SRC elisp
+(/ (* 10 (+ 30 5 2)) 5)
+#+END_SRC
+
+#+RESULTS: elisp-max-numbers
+: 74
+
+#+BEGIN_SRC python :results output :noweb yes
+<<python-calc>>
+numbers = [x for x in range(<<elisp-max-numbers()>>)]
+print("The sum of the numbers is: " + str(calculate_sum(numbers)))
+#+END_SRC
+
+#+RESULTS:
+: The sum of the numbers is: 2701
 
 ** DONE Note taking
 CLOSED: [2018-11-20 Tue 16:47]
@@ -377,7 +482,9 @@ let's investigate another route ...
 *** Improve it II
 
 #+BEGIN_SRC elisp
-(defun my/docker-match (name-regexp)
+(defun docker-match (name-regexp)
+  ;; return the name of the last docker image which matches the input
+  ;; NAME-REGEXP
   (with-temp-buffer (shell-command "docker ps" t)
                     (goto-char (point-min))
                     (let ((name-match '()))
@@ -390,13 +497,13 @@ let's investigate another route ...
                         (forward-line 1))
                       name-match)))
 
-(defun my/docker-path (name-regexp  &optional extended-path)
+(defun docker-path (name-regexp  &optional extended-path)
   (if extended-path
-      (format "/docker:%s:/%s" (my/docker-match name-regexp) extended-path)
-    (format "/docker:%s:/" (my/docker-match name-regexp))))
+      (format "/docker:%s:/%s" (docker-match name-regexp) extended-path)
+    (format "/docker:%s:/" (docker-match name-regexp))))
 
-(my/docker-path "minimal_python")
-(my/docker-path "minimal_python" "app")
+(docker-path "minimal_python")
+(docker-path "minimal_python" "app")
 #+END_SRC
 
 #+RESULTS:
