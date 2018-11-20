@@ -875,7 +875,60 @@ We also need to add some code in the ~config.el~ file.
 
 *** Appendix
 
-I feel that the Emacs calculator should get some more attention.
+Now I thought that this article deserved some bonus information about Emacs
+calculator. I knew about it before but writing this part got me interested into
+knowing more. And I think that it was a good example of one of the aspects that
+I love about Org-mode which is to be able to experiment. I found some useful
+[[https://github.com/dfeich/org-babel-examples/blob/master/calc/calc.org][calc-babel-examples]] and [[http://ehneilsen.net/notebook/orgExamples/org-examples.html][org-examples]] which I took inspiration from.
+
+
+We can start of simple with some arithmatic:
+#+BEGIN_SRC calc
+10 + 3 * 5 /2.0
+#+END_SRC
+
+#+RESULTS:
+: 17.5
+
+**** I
+
+But the calculator knows more than that. We can also calculate ~cosine~. It
+seems however that it doesn't use SI units which is probably some setting
+somewhere that needs to be set.
+#+BEGIN_SRC calc
+cos(180)
+#+END_SRC
+
+#+RESULTS:
+: -1
+
+**** II
+
+Oh but let's have a look at this equation system, could calc solve that for us
+too?
+#+BEGIN_EXAMPLE
+x*2+x=4,x
+#+END_EXAMPLE
+
+***** A
+
+Yes we can!
+#+BEGIN_SRC calc
+fsolve(x*2+x=4,x)
+#+END_SRC
+
+***** B
+
+So wait if we can do that, and it's supported in formulas that would mean that
+we would be able to use it like this:
+
+| Expression | Derivative |
+|------------+------------|
+| sqrt(x)    |            |
+| cos(x)     |            |
+| x^2        |            |
+| 1/x^2      |            |
+#+TBLFM: $2=deriv($1,x)
 
 ** Summary
 #+OPTIONS: num:nil reveal_control:nil toc:nil
