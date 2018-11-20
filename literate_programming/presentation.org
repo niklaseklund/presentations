@@ -31,6 +31,46 @@ Good to know commands in Org-mode
 | M-Enter           |                 |
 
 ** Literate programming
+
+#+BEGIN_SRC sh
+echo "hello there!"
+#+END_SRC
+
+#+RESULTS:
+: hello there!
+
+#+BEGIN_SRC elisp
+(format "hello there")
+#+END_SRC
+
+#+RESULTS:
+: hello there
+
+#+BEGIN_SRC python
+print("hello there")
+#+END_SRC
+
+#+RESULTS:
+: None
+
+#+BEGIN_SRC python
+return "hello there"
+#+END_SRC
+
+#+RESULTS:
+: hello there
+
+#+BEGIN_SRC python :results output
+print("hello there")
+#+END_SRC
+
+#+RESULTS:
+: hello there
+
+#+BEGIN_QUOTE
+Org returns the contents of the standard output stream as as text results.
+#+END_QUOTE
+
 ** Arguments
 ** Sessions
 ** Tangling
