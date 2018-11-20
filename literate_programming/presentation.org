@@ -30,7 +30,7 @@ Good to know commands in Org-mode
 | C-Enter           |                 |
 | M-Enter           |                 |
 
-** Literate programming
+** TODO Literate programming
 
 #+BEGIN_SRC sh
 echo "hello there!"
@@ -71,10 +71,114 @@ print("hello there")
 Org returns the contents of the standard output stream as text results.
 #+END_QUOTE
 
-** Arguments
-** Sessions
-** Tangling
-** Note taking
+** TODO Tweak
+** TODO Chain
+
+Mixing text and blocks of code seems to work great from the examples so far.
+This block works as well but what would happen if we for our own understandings
+sake would like to split up the block further?
+#+BEGIN_SRC sh :results output
+MY_NAME="Niklas"
+echo $MY_NAME
+#+END_SRC
+
+#+RESULTS:
+: Niklas
+
+*** 1
+Let's create a variable
+#+BEGIN_SRC sh :results silent
+MY_NAME="Niklas"
+#+END_SRC
+
+And let's print it's value
+#+BEGIN_SRC sh :results ouput
+echo $MY_NAME
+#+END_SRC
+
+#+RESULTS:
+
+That doesn't work, and that's because after a block has been evaluated that
+shell session is terminated. We would need for them to somehow share the same
+session and to make it persistent so it doesn't die.
+
+*** 2
+:PROPERTIES:
+:header-args: :session session-shell-chain
+:END:
+
+Let's create a variable
+#+BEGIN_SRC sh :results silent
+MY_NAME="Niklas"
+#+END_SRC
+
+And let's print it's value
+#+BEGIN_SRC sh :results ouput
+echo $MY_NAME
+#+END_SRC
+
+#+RESULTS:
+: Niklas
+
+*** 3
+:PROPERTIES:
+:header-args: :session session-python-chain
+:END:
+
+This works with other languages that supports [[https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop][interactive
+repls]](read-eval-print-loop).
+
+#+BEGIN_SRC python :results output
+def calculate_sum(numbers):
+    sum = 0
+    for number in numbers:
+       sum += number
+
+    return sum
+#+END_SRC
+
+#+RESULTS:
+
+#+BEGIN_SRC python :results output
+numbers = [x for x in range(20)]
+print("The sum of the numbers is: " + str(calculate_sum(numbers)))
+#+END_SRC
+
+#+RESULTS:
+: The sum of the numbers is: 190
+
+** TODO Compose
+
+Chaining blocks through ~sessions~ as we saw where useful for some types of
+languages like ~python~ and ~shells~. But that is not the only way. For me it
+can make sense to make the blocks as small as needed. That might differ
+depending on context. So we shall look more into how to compose different
+blocks. This is a feature called ~noweb~.
+
+*** A
+
+Let's take the previous python example.
+
+This is where we create our function
+#+NAME: python-calc
+#+BEGIN_SRC python
+def calculate_sum(numbers):
+    sum = 0
+    for number in numbers:
+       sum += number
+
+    return sum
+#+END_SRC
+
+And here we create the data dn call the function
+#+BEGIN_SRC python :results output :noweb yes
+<<python-calc>>
+numbers = [x for x in range(20)]
+print("The sum of the numbers is: " + str(calculate_sum(numbers)))
+#+END_SRC
+
+** DONE Note taking
+CLOSED: [2018-11-20 Tue 16:47]
 
 I started to take notes with Org-mode and soon I found myself reading a
 programming book and realized how greatly suited Org is for that use case.
@@ -98,8 +202,11 @@ automatically get a split view with my notes and with the actual pdf file.
 Even though linking to other files is useful I am again feeling that I am
 lacking the context sometimes. Sure it's useful if I want to reference the whole
 file but not if there is a subpart of it. Luckily there is a cool solution to
-that which involves ~org-capture~
-** Docker
+that which involves ~org-capture~. Let's use ~find-function~ to have a look at
+the implementation.
+
+** DONE Our own image
+CLOSED: [2018-11-20 Tue 16:47]
 
 I don't build Docker images that often so it would be really useful if I could
 document the procedure both for later reference. On Arch Linux I don't
@@ -388,7 +495,8 @@ docker rm $name
 docker ps
 #+END_SRC
 
-** Investigation
+** DONE Performance analysis
+CLOSED: [2018-11-20 Tue 16:47]
 #+LaTeX_HEADER: \usepackage{minted}
 #+LaTeX_HEADER: \usemintedstyle{paraiso-light}
 Let's make a fun little investigation. Assume we have some data of a signal and
@@ -719,7 +827,7 @@ We also need to add some code in the ~config.el~ file.
 
 I feel that the Emacs calculator should get some more attention.
 
-** Summary
+** TODO Summary
 #+OPTIONS: num:nil reveal_control:nil toc:nil
 #+OPTIONS: reveal_title_slide:nil reveal_slide_number:nil
 #+REVEAL_THEME: moon
@@ -729,3 +837,8 @@ I feel that the Emacs calculator should get some more attention.
 
 - Org-mode makes it easy to get your information in context
 - Org-mode makes it easy to export your documents into reports or presentations
+
+*** One more thing ... :noexport:
+
+Link to blog post
+
