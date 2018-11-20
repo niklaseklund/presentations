@@ -495,6 +495,76 @@ docker rm $name
 docker ps
 #+END_SRC
 
+*** Improve it II
+
+#+BEGIN_SRC elisp
+(defun my/docker-match (name-regexp)
+  (with-temp-buffer (shell-command "docker ps" t)
+                    (goto-char (point-min))
+                    (let ((name-match '()))
+                      (while (not (eobp))
+                        (let ((current-name (string-trim (thing-at-point 'line))))
+                          (if (string-match name-regexp current-name)
+                              (progn
+                                (end-of-line)
+                                (setq name-match (format "%s" (thing-at-point 'symbol))))))
+                        (forward-line 1))
+                      name-match)))
+
+(defun my/docker-path (name-regexp  &optional extended-path)
+  (if extended-path
+      (format "/docker:%s:/%s" (my/docker-match name-regexp) extended-path)
+    (format "/docker:%s:/" (my/docker-match name-regexp))))
+
+(my/docker-path "minimal_python")
+(my/docker-path "minimal_python" "app")
+#+END_SRC
+
+#+RESULTS:
+: /docker:trusting_banzai:/
+
+#+BEGIN_SRC sh :session session-docker-agent :dir (my/docker-path "minimal_python" "app")
+ls
+#+END_SRC
+
+#+RESULTS:
+|                                          |
+| $ [0;0mapp.py[m   [0;0mapp2.py[m |
+
+
+#+BEGIN_SRC python :tangle (my/docker-path "minimal_python" "app/app3.py")
+for i in range(20):
+    print("i has the value " + str(i))
+#+END_SRC
+
+#+BEGIN_SRC sh :session session-docker-agent :results output
+python app3.py
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+i has the value 0
+i has the value 1
+i has the value 2
+i has the value 3
+i has the value 4
+i has the value 5
+i has the value 6
+i has the value 7
+i has the value 8
+i has the value 9
+i has the value 10
+i has the value 11
+i has the value 12
+i has the value 13
+i has the value 14
+i has the value 15
+i has the value 16
+i has the value 17
+i has the value 18
+i has the value 19
+#+end_example
+
 ** DONE Performance analysis
 CLOSED: [2018-11-20 Tue 16:47]
 #+LaTeX_HEADER: \usepackage{minted}
@@ -540,8 +610,7 @@ Let's use some Emacs lisp to generate the ground truth and the estimates for us:
 |    20 |       21 |
 
 #+name: addhdr
-#+begin_src emacs-lisp :var tbl=""
-(cons 'hline (cons '("Truth" "Estimate") (cons 'hline tbl)))
+#+begin_src emacs-lisp :var tbl="""Truth" "Estimate") (cons 'hline tbl)))
 #+end_src
 
 Let's give the results a name so that we can reference the table later. It's
