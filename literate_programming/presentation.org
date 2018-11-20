@@ -873,7 +873,7 @@ We also need to add some code in the ~config.el~ file.
         "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
 #+END_SRC
 
-*** Appendix
+*** Bonus :noexport:
 
 Now I thought that this article deserved some bonus information about Emacs
 calculator. I knew about it before but writing this part got me interested into
