@@ -109,7 +109,6 @@ have [[https://www.docker.com/][Docker]] installed so that is the first step.
 
 I found docker related instructions on the [[https://wiki.archlinux.org/index.php/docker][arch wiki]]. So first we install docker
 with the package manager:
-
 #+BEGIN_SRC sh
 sudo pacman -S docker
 #+END_SRC
@@ -436,7 +435,7 @@ Great we solved the issue!
 
 *** Knock it up a notch
 :PROPERTIES:
-:header-args: :var docker_image="niklascarlsson/minimal_python3"
+:header-args: :var docker_image="python3"
 :END:
 
 #+BEGIN_SRC sh :session org-docker-minimal-error :results none
@@ -449,8 +448,8 @@ docker ps
 
 #+NAME: running-docker-images
 #+RESULTS:
-| 9fd1424b4283 | niklascarlsson/minimal_python3 | /bin/sh | About | an | hour | ago | Up | About | an | hour | boring_hermann |
-| 9fd1424b4283 | niklascarlsson/minimal_python2 | /bin/sh | About | an | hour | ago | Up | About | an | hour | fake_nick      |
+| e43cafa84e96 | niklascarlsson/minimal_python3 | /bin/sh | 3 | minutes | ago | Up | 3 | minutes | peaceful_nash |
+| e43cafa84e96 | niklascarlsson/minimal_python4 | /bin/sh | 3 | minutes | ago | Up | 3 | minutes | niklas        |
 
 We can start with removing the first line that doesn't make sense
 #+NAME: remove-first-line
@@ -458,34 +457,26 @@ We can start with removing the first line that doesn't make sense
 (cdr tbl)
 #+END_SRC
 
-#+BEGIN_SRC elisp :var tbl=running-docker-images :results output
-(while tbl
-  (print (cdr (cdr (car tbl))))
-  (setq tbl (cdr tbl)))
-#+END_SRC
-
-#+RESULTS:
-:
-: ("/bin/sh" "About" "an" "hour" "ago" "Up" "About" "an" "hour" "boring_hermann")
-:
-: ("/bin/sh" "About" "an" "hour" "ago" "Up" "About" "an" "hour" "fake_nick")
-
 #+NAME: nick-name
-#+BEGIN_SRC elisp :var tbl=running-docker-images :post set-image-nick-name(name=*this*) :results silent
+#+BEGIN_SRC elisp :var tbl=running-docker-images :post set-image-nick-name(name=*this*)
 (let ((elements nil)
       (name nil)
       (nick-name nil))
   (while tbl
     (setq elements (car tbl))
-    (when (remove-if-not (lambda (element)  (string-match docker_image element)) elements)
+    (when (remove-if-not (lambda (element) (if (stringp element) (string-match docker_image element))) elements)
       (setq nick-name (last elements)))
     (setq tbl (cdr tbl)))
   nick-name)
 #+END_SRC
 
+#+RESULTS: nick-name
+| peaceful_nash |
+
 #+NAME: set-image-nick-name
-#+BEGIN_SRC elisp :var name="" :results none
+#+BEGIN_SRC elisp :var name=""
 (setq-local docker-run-name (format "/docker:%s:/" (car name)))
+name
 #+END_SRC
 
 #+BEGIN_SRC sh :session my-docker-insider :dir (message docker-run-name) :results output
@@ -510,6 +501,118 @@ cat requirements.txt
 : =0.1.5,<0.2
 : =1.4.2,<1.5
 : =19,<20
+
+Let's change the app on the fly instead of having to rebuild
+
+#+BEGIN_SRC sh :session my-docker-insider
+cd app
+ls
+#+END_SRC
+
+#+RESULTS:
+|                                                 |
+| $ /docker:boring_hermann:/ #$ [0;0mapp.py[m |
+
+We can now run the python file directly from inside Org-mode
+#+BEGIN_SRC sh :session my-docker-insider :results output
+python app.py
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+
+$ i has the value 0
+i has the value 1
+i has the value 2
+i has the value 3
+i has the value 4
+i has the value 5
+i has the value 6
+i has the value 7
+i has the value 8
+i has the value 9
+i has the value 10
+i has the value 11
+i has the value 12
+i has the value 13
+i has the value 14
+i has the value 15
+i has the value 16
+i has the value 17
+i has the value 18
+i has the value 19
+#+end_example
+
+Let's change it
+#+BEGIN_SRC python :tangle (format "%s/app/app.py" docker-run-name)
+print("hello")
+#+END_SRC
+
+#+BEGIN_SRC sh :session my-docker-insider :results output
+python app.py
+#+END_SRC
+
+#+RESULTS:
+:
+: $ hello
+
+I want to stop my running dockers
+#+BEGIN_SRC sh :var name=nick-name :results output
+docker ps
+docker stop $name
+docker rm $name
+docker ps
+#+END_SRC
+
+#+RESULTS:
+: CONTAINER ID        IMAGE                            COMMAND             CREATED             STATUS              PORTS               NAMES
+: e43cafa84e96        niklascarlsson/minimal_python3   "/bin/sh"           27 minutes ago      Up 27 minutes                           peaceful_nash
+: peaceful_nash
+: peaceful_nash
+: CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+
+
+#+BEGIN_SRC sh :session org-docker-minimal-error :results none
+docker run -it $docker_image /bin/sh
+#+END_SRC
+
+#+BEGIN_SRC sh
+docker ps
+#+END_SRC
+
+#+RESULTS:
+| CONTAINER    | ID                             | IMAGE   | COMMAND | CREATED | STATUS | PORTS | NAMES |         |               |
+| e43cafa84e96 | niklascarlsson/minimal_python3 | /bin/sh |      10 | seconds | ago    | Up    |     9 | seconds | peaceful_nash |
+
+#+BEGIN_SRC sh :session my-docker-insider2 :dir (message docker-run-name) :results output
+cd app
+python app.py
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+
+$ /docker:peaceful_nash:/ #$ /docker:peaceful_nash:/ #$ i has the value 0
+i has the value 1
+i has the value 2
+i has the value 3
+i has the value 4
+i has the value 5
+i has the value 6
+i has the value 7
+i has the value 8
+i has the value 9
+i has the value 10
+i has the value 11
+i has the value 12
+i has the value 13
+i has the value 14
+i has the value 15
+i has the value 16
+i has the value 17
+i has the value 18
+i has the value 19
+#+end_example
 
 ** Investigation
 #+LaTeX_HEADER: \usepackage{minted}
