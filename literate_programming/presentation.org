@@ -328,7 +328,8 @@ with the package manager:
 sudo pacman -S docker
 #+END_SRC
 
-Next we start the docker service
+Next we start the docker service, yes that's right we can run sudo commands from
+the blocks as well.
 #+BEGIN_SRC sh :dir "/sudo::" :results none
 sudo systemctl start docker
 #+END_SRC
@@ -360,7 +361,7 @@ groups niklascarlsson
 
 But I want to belong to the docker group as well, so I will need to run a
 command to achieve that. It will require me to use sudo which we can achieve
-thanks to ~TRAMP~
+thanks to [[https://www.emacswiki.org/emacs/TrampMode][TRAMP]](Transparent Remote Access, Multiple Protocols)
 #+BEGIN_SRC sh :dir "/sudo::""
 sudo gpasswd -a niklascarlsson docker
 #+END_SRC
