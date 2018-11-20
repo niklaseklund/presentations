@@ -177,6 +177,9 @@ numbers = [x for x in range(20)]
 print("The sum of the numbers is: " + str(calculate_sum(numbers)))
 #+END_SRC
 
+#+RESULTS:
+: The sum of the numbers is: 190
+
 ** DONE Note taking
 CLOSED: [2018-11-20 Tue 16:47]
 
@@ -371,130 +374,6 @@ go back and fix that. One way would be to fix the source code, tangle all the
 blocks and rebuild the image to see if it works. That approach would work but
 let's investigate another route ...
 
-*** Improve it
-:PROPERTIES:
-:header-args: :var docker_image="minimal_python"
-:END:
-
-We start the our docker image inside a session block so that it will continue to
-live on instead of just being executed once.
-#+BEGIN_SRC sh :session session-docker-error :results none
-docker run -it $docker_image /bin/sh
-#+END_SRC
-
-Let's see what running docker images there are:
-#+NAME: running-docker-images
-#+BEGIN_SRC sh :results table :post remove-first-line(tbl=*this*) :exports both
-docker ps
-#+END_SRC
-
-#+RESULTS: running-docker-images
-| 753d37e14ef8 | minimal_python | /bin/sh | 4 | seconds | ago | Up | 2 | seconds | hardcore_knuth |
-
-We can start with removing the first line since that doesn't contain any data
-which we are interested in
-#+NAME: remove-first-line
-#+BEGIN_SRC elisp :var tbl=""
-(cdr tbl)
-#+END_SRC
-
-Next let's figure out the nick-name of our docker image. The images gets
-different names every time
-#+NAME: nick-name
- :post set-image-nick-name(name=*this*)
-#+BEGIN_SRC elisp :var tbl=running-docker-images
-(let ((elements nil)
-      (name nil)
-      (nick-name nil))
-  (while tbl
-    (setq elements (car tbl))
-    (when (remove-if-not (lambda (element) (if (stringp element) (string-match docker_image element))) elements)
-      (setq nick-name (last elements)))
-    (setq tbl (cdr tbl)))
-  (setq-local docker-run-name (format "/docker:%s:/" (car nick-name)))
-  nick-name)
-#+END_SRC
-
-#+RESULTS:
-| hardcore_knuth |
-
-We were setting a buffer local variable in the previous block. The reason for
-that comes here.Let's create another session in which we utilize the variable
-and with the help of [[https://www.emacswiki.org/emacs/TrampMode][TrampMode]] we can create a session inside the running docker.
-#+BEGIN_SRC sh :session session-docker-inside :dir (message docker-run-name) :results output
-ls
-#+END_SRC
-
-#+RESULTS:
-:
-: $ /docker:hardcore_knuth:/ #$ [1;34mapp[m               [1;34mhome[m              [1;34mproc[m              [1;34msbin[m              [1;34musr[m
-: [1;34mbin[m               [1;34mlib[m               [0;0mrequirements.txt[m  [1;34msrv[m               [1;34mvar[m
-: [1;34mdev[m               [1;34mmedia[m             [1;34mroot[m              [1;34msys[m
-: [1;34metc[m               [1;34mmnt[m               [1;34mrun[m               [1;34mtmp[m
-
-We can now run the python file directly from inside Org-mode instead of having
-to bother with building
-#+BEGIN_SRC sh :session session-docker-inside :results output
-cd app
-python app.py
-#+END_SRC
-
-#+RESULTS:
-:
-: $ /docker:hardcore_knuth:/ #$   File "app.py", line 2
-:     print "i has the value " + str(i)
-:                            ^
-: SyntaxError: invalid syntax
-
-Let's fix the incompatibility:
-#+BEGIN_SRC python :tangle (format "%s/app/app.py" docker-run-name)
-for i in range(20):
-    print("i has the value " + str(i))
-#+END_SRC
-
-We tangle and then just rerun the python file and the error is gone:
-#+BEGIN_SRC sh :session session-docker-inside :results output
-python app.py
-#+END_SRC
-
-#+RESULTS:
-#+begin_example
-
-$ i has the value 0
-i has the value 1
-i has the value 2
-i has the value 3
-i has the value 4
-i has the value 5
-i has the value 6
-i has the value 7
-i has the value 8
-i has the value 9
-i has the value 10
-i has the value 11
-i has the value 12
-i has the value 13
-i has the value 14
-i has the value 15
-i has the value 16
-i has the value 17
-i has the value 18
-i has the value 19
-#+end_example
-
-Mission accomplished. Let's clean up after us. First we should kill all the running sessions
-#+BEGIN_SRC elisp
-(kill-matching-buffers "session-docker" t t)
-#+END_SRC
-
-Secondly stop and remove the running docker
-#+BEGIN_SRC sh :var name=nick-name :results output
-docker ps
-docker stop $name
-docker rm $name
-docker ps
-#+END_SRC
-
 *** Improve it II
 
 #+BEGIN_SRC elisp
@@ -588,29 +467,30 @@ Let's use some Emacs lisp to generate the ground truth and the estimates for us:
 |-------+----------|
 | Truth | Estimate |
 |-------+----------|
-|     1 |        1 |
-|     2 |        2 |
-|     3 |        2 |
-|     4 |        4 |
-|     5 |        3 |
+|     1 |        2 |
+|     2 |        1 |
+|     3 |        3 |
+|     4 |        2 |
+|     5 |        6 |
 |     6 |        7 |
-|     7 |        6 |
-|     8 |        6 |
-|     9 |        8 |
-|    10 |        8 |
-|    11 |       10 |
+|     7 |        7 |
+|     8 |        9 |
+|     9 |        9 |
+|    10 |        9 |
+|    11 |       11 |
 |    12 |       10 |
-|    13 |       13 |
-|    14 |       14 |
+|    13 |       14 |
+|    14 |       15 |
 |    15 |       13 |
-|    16 |       16 |
-|    17 |       16 |
-|    18 |       19 |
-|    19 |       17 |
+|    16 |       15 |
+|    17 |       15 |
+|    18 |       18 |
+|    19 |       18 |
 |    20 |       21 |
 
 #+name: addhdr
-#+begin_src emacs-lisp :var tbl="""Truth" "Estimate") (cons 'hline tbl)))
+#+begin_src emacs-lisp :var tbl=""
+(cons 'hline (cons '("Truth" "Estimate") (cons 'hline tbl)))
 #+end_src
 
 Let's give the results a name so that we can reference the table later. It's
