@@ -57,7 +57,7 @@ automatically get a split view with my notes and with the actual pdf file.
 
 ** Investigation
 #+LaTeX_HEADER: \usepackage{minted}
-#+LaTeX_HEADER: \usemintedstyle{friendly}
+#+LaTeX_HEADER: \usemintedstyle{paraiso-light}
 Let's make a fun little investigation. Assume we have some data of a signal and
 we want to make an algorithm that tracks the 1-d signal. This presentation is a
 little bit too short to make a real algorithm and data in so we will fake it
