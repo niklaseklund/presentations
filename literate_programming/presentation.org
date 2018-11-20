@@ -31,14 +31,33 @@ Good to know commands in Org-mode
 | M-Enter           |                 |
 
 ** Literate programming
-
-
 ** Arguments
 ** Sessions
 ** Tangling
 ** Note taking
-** Investigation
 
+I started to take notes with Org-mode and soon I found myself reading a
+programming book and realized how greatly suited Org is for that usecase.
+
+I will open my notes file that I have and navigate to a section with notes from
+the book
+
+With Org-mode I can then easily take notes and experiment with the programming
+examples that exists in the book. For me that is a perfect match which makes it
+much easier for me to grasp the concepts.
+
+However now when I am reading the notes in hindsight they aren't as clear as
+they where when I took them. I think what I am missing is the actual context
+from within they where taken. I guess I need to open the pdf and look for clues.
+
+That would be if I didn't have Org-mode ... But with the package ~Org-Noter~ I
+get exactly this. So I will call the function ~M-x org-noter~ and I
+automatically get a split view with my notes and with the actual pdf file.
+[[file:~/org/hacking_notebook.org::*The%20if%20Special%20Form][An introduction to Elisp: The if Special Form]]
+
+** Investigation
+#+LaTeX_HEADER: \usepackage{minted}
+#+LaTeX_HEADER: \usemintedstyle{friendly}
 Let's make a fun little investigation. Assume we have some data of a signal and
 we want to make an algorithm that tracks the 1-d signal. This presentation is a
 little bit too short to make a real algorithm and data in so we will fake it
@@ -47,40 +66,42 @@ instead.
 *** Synthesize the data
 Let's use some Emacs lisp to generate the ground truth and the estimates for us:
 
-#+BEGIN_SRC emacs-lisp :results value table :post addhdr(*this*)
+#+BEGIN_SRC emacs-lisp :results value table :post addhdr(*this*) :exports both
   (mapcar (lambda (i)
             (list i (+ (random 4) (- i 2))))
           (number-sequence 1 20))
 #+END_SRC
 
+#+CAPTION: Truth and Estimate
 #+NAME: est-truth-data
 #+RESULTS:
+|-------+----------|
 | Truth | Estimate |
 |-------+----------|
 |     1 |        1 |
 |     2 |        2 |
-|     3 |        3 |
+|     3 |        2 |
 |     4 |        4 |
-|     5 |        5 |
+|     5 |        3 |
 |     6 |        7 |
-|     7 |        8 |
-|     8 |        9 |
+|     7 |        6 |
+|     8 |        6 |
 |     9 |        8 |
 |    10 |        8 |
-|    11 |        9 |
-|    12 |       11 |
-|    13 |       11 |
-|    14 |       13 |
-|    15 |       14 |
+|    11 |       10 |
+|    12 |       10 |
+|    13 |       13 |
+|    14 |       14 |
+|    15 |       13 |
 |    16 |       16 |
-|    17 |       15 |
-|    18 |       17 |
-|    19 |       20 |
+|    17 |       16 |
+|    18 |       19 |
+|    19 |       17 |
 |    20 |       21 |
 
 #+name: addhdr
 #+begin_src emacs-lisp :var tbl=""
-(cons '("Truth" "Estimate") (cons 'hline tbl))
+(cons 'hline (cons '("Truth" "Estimate") (cons 'hline tbl)))
 #+end_src
 
 Let's give the results a name so that we can reference the table later. It's
@@ -153,7 +174,7 @@ it's performance.
 In order to get the values from the other table I am using [[https://orgmode.org/manual/References.html#index-remote-references-352][remote references]]. To
 refer to the values of the other table.
 
-Table formulas uses ~Emacs calc~ syntax by default. I have a hard time not
+Table
 thinking of ~Windows calc~ when I hear this name. But this is something
 different.
 
@@ -163,7 +184,7 @@ the performance of the algorithm. Since that equation would be quite long in
 Emacs lisp maybe it's time to try something else.
 
 We can actually pass the data from the table into other code blocks, which is a
-supercool. We can therefore create a block with Python code which we pass values
+super cool. We can therefore create a block with Python code which we pass values
 into in order to be able to calculate the [[https://en.wikipedia.org/wiki/Root-mean-square_deviation][rmse]]
 
 #+NAME: rmse
@@ -182,57 +203,59 @@ return result
 
 A second try
 
-
 *** Describe the flow
 
 I would like to describe the flow better. It would be great if we could
 visualize it, perhaps in a flow chart.
 
-#+BEGIN_SRC plantuml :file .images/flow.png :export both
+#+BEGIN_SRC plantuml :file .images/flow.png :exports results
 @startuml
-class Car
+(*) --> "Synthesize data with Elisp"
 
-Driver - Car : drives >
-Car *- Wheel : have 4 >
-Car -- Person : < owns
-
+if "Improve results with post" then
+  -->[Visualize the data] "Python and matplotlib"
+else
+  ->[Process the data] "Table formulas"
+  -->[Elisp, calc and code blocks] "Visualize the flow"
+  -->[plantUML] (*)
+endif
 @enduml
 #+END_SRC
 
+#+CAPTION: The flow of our investigation
 #+RESULTS:
 [[file:.images/flow.png]]
 
-Having problems with executing plantUML on Arch Linux
-
-Make sure that the ~jre-opendjk-headless~ is installed
-#+BEGIN_SRC sh
-pacman -Ss openjdk | grep "headless"
-#+END_SRC
-
-#+RESULTS:
-| extra/jre-openjdk-headless   | 11.0.1.u13-2    | [installed] |          |         |             |
-| OpenJDK                      | Java            |          11 | headless | runtime | environment |
-| extra/jre10-openjdk-headless | 10.0.2.u13-1    |             |          |         |             |
-| OpenJDK                      | Java            |          10 | headless | runtime | environment |
-| extra/jre7-openjdk-headless  | 7.u171_2.6.13-1 |             |          |         |             |
-| OpenJDK                      | Java            |           7 | headless | runtime | environment |
-| extra/jre8-openjdk-headless  | 8.u192-1        |             |          |         |             |
-| OpenJDK                      | Java            |           8 | headless | runtime | environment |
-
-Next check the runtime environment if that is set, https://wiki.archlinux.org/index.php/java#Installation
-#+BEGIN_SRC sh
-arch-linux-java status
-#+END_SRC
-
-If result is no default environment set but Available environment is
-java-11-openjdk then:
-
-#+BEGIN_SRC sh
-sudo arch-linux-java set java-11-openjdk
-#+END_SRC
-
 *** Export
+
+I think that our investigation here has been a success and it would be great if
+we can share the findings with our colleges. Unfortunately not all of them have
+access to Org-mode and can read the information in this format. Cause as we saw
+before this is just plain text so it won't look as nice outside this
+environment.
+
+Luckily Org-mode supports a lot of different exports. I am thinking for this
+particular use case something common like a ~pdf~ would be a good choice. We
+also would like it to look nice and professional so let's make it a ~LaTeX~
+styled pdf.
+
+To export we only need to use the function ~M-x org-latex-export-to-pdf~. There
+are two other alternatives here using ~pandoc~ but I didn't find the export as
+good so I will choose the first one.
+
+One thing that did bother me though is that now I exported the file and the next
+step would naturally be to look at the results. If you noticed with pandoc there
+was a function called ~M-x org-pandoc-export-to-latex-pdf-and-open~. I want that
+too cause if we open ~dired~ the directory editor we can see that the file is
+indeed here.
+
+But I want this automated, good thing that we are using Emacs then, let's create
+the function we need.
+
 *** Improve
+
+So I already prepared for this and this is the elisp code we need to have a
+function which also will open the pdf after the export has finished.
 
 #+BEGIN_SRC elisp
 (defun org-latex-export-to-pdf-and-open ()
@@ -245,9 +268,124 @@ resulting file"
   (find-file (concat name ".pdf"))))
 #+END_SRC
 
+We can see that it has the name ~pdf-and-open~. Firstly it retrieves the name of
+the current file, without the extension. Then it calls the regular function and
+lastly opens the exported PDF.
+
+To install it I just open it in the popup buffer and evaluate the function and
+now when I search through ~M-x~ I will find the function and it will do exactly
+what we want.
+
+*** Visual :noexport:
+Some notes on how to get syntax highlighting to work for exported latex pdf
+[[https://emacs.stackexchange.com/questions/20839/exporting-code-blocks-to-pdf-via-latex/20841#20841][here]] and [[https://stackoverflow.com/questions/21005885/export-org-mode-code-block-and-result-with-different-styles/21007117#21007117][here]]. The takeaways where:
+
+- Install pygmentize
+- Install minted
+
+Installing them using pacman
+#+BEGIN_SRC sh :results output
+pacman -Ss "minted"
+#+END_SRC
+
+#+RESULTS:
+: community/minted 2.5-1
+:     Syntax highlighted source code for LaTeX
+
+#+BEGIN_SRC sh :results output
+pacman -Ss "pygmentize"
+#+END_SRC
+
+#+RESULTS:
+: community/pygmentize 2.2.0-2
+:     Python syntax highlighter
+
+To be able to see which styles we can choose from we can ask ~pygmentize~
+#+BEGIN_SRC sh :results output
+pygmentize -L styles
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+Pygments version 2.2.0, (c) 2006-2017 by Georg Brandl.
+
+Styles:
+~~~~~~~
+,* default:
+    The default style (inspired by Emacs 22).
+,* emacs:
+    The default style (inspired by Emacs 22).
+,* friendly:
+    A modern style based on the VIM pyte theme.
+,* colorful:
+    A colorful style, inspired by CodeRay.
+,* autumn:
+    A colorful style, inspired by the terminal highlighting style.
+,* murphy:
+    Murphy's style from CodeRay.
+,* manni:
+    A colorful style, inspired by the terminal highlighting style.
+,* monokai:
+    This style mimics the Monokai color scheme.
+,* perldoc:
+    Style similar to the style used in the perldoc code blocks.
+,* pastie:
+    Style similar to the pastie default style.
+,* borland:
+    Style similar to the style used in the borland IDEs.
+,* trac:
+    Port of the default trac highlighter design.
+,* native:
+    Pygments version of the "native" vim theme.
+,* fruity:
+    Pygments version of the "native" vim theme.
+,* bw:
+
+,* vim:
+    Styles somewhat like vim 7.0
+,* vs:
+
+,* tango:
+    The Crunchy default Style inspired from the color palette from the Tango Icon Theme Guidelines.
+,* rrt:
+    Minimalistic "rrt" theme, based on Zap and Emacs defaults.
+,* xcode:
+    Style similar to the Xcode default colouring theme.
+,* igor:
+    Pygments version of the official colors for Igor Pro procedures.
+,* paraiso-light:
+
+,* paraiso-dark:
+
+,* lovelace:
+    The style used in Lovelace interactive learning environment. Tries to avoid the "angry fruit salad" effect with desaturated and dim colours.
+,* algol:
+
+,* algol_nu:
+
+,* arduino:
+    The Arduino® language style. This style is designed to highlight the Arduino source code, so exepect the best results with it.
+,* rainbow_dash:
+    A bright and colorful syntax highlighting theme.
+,* abap:
+
+#+end_example
+
+We also need to add some code in the ~config.el~ file.
+#+BEGIN_SRC elisp
+(require 'ox-latex)
+(add-to-list 'org-latex-packages-alist '("" "minted"))
+(setq org-latex-listings 'minted)
+
+(setq org-latex-pdf-process
+      '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+        "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+        "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+#+END_SRC
+
 *** Appendix
 
-I feel that the Emacs calculator requires some more data
+I feel that the Emacs calculator should get some more attention.
 
 ** Summary
 #+OPTIONS: num:nil reveal_control:nil toc:nil
@@ -257,4 +395,5 @@ I feel that the Emacs calculator requires some more data
 
 *** What have we learnt?
 
- ps
+- Org-mode makes it easy to get your information in context
+- Org-mode makes it easy to export your documents into reports or presentations
