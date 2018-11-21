@@ -69,6 +69,7 @@ easy to version control and are safe proof for the future.
 We can create a babel block very easily with ~<s~ followed by ~TAB~
 
 *** B
+
 #+BEGIN_SRC sh
 echo "hello there!"
 #+END_SRC
@@ -595,6 +596,7 @@ plt.savefig('.images/est_vs_truth.png')
 
 #+CAPTION: Tracking the true value
 #+RESULTS:
+[[file:.images/est_vs_truth.png]]
 
 Cool, the performance of the fake algorithm is not that bad. I think we can be
 pretty happy with it. let's see if we can gather some more information about
@@ -687,6 +689,7 @@ endif
 
 #+CAPTION: The flow of our investigation
 #+RESULTS:
+[[file:.images/flow.png]]
 
 *** Export
 
@@ -738,7 +741,7 @@ To install it I just open it in the popup buffer and evaluate the function and
 now when I search through ~M-x~ I will find the function and it will do exactly
 what we want.
 
-*** Emacs Calc :noexport:
+*** Appendix: Emacs Calc
 
 Now I thought that this article deserved some bonus information about Emacs
 calculator. I knew about it before but writing this part got me interested into
