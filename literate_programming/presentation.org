@@ -634,7 +634,7 @@ result = np.sqrt(np.mean(np.square(error)))
 return result
 #+END_SRC
 
-Or perhaps a block of elisp to calculat the mean value
+Or perhaps a block of elisp to calculate the mean value
 #+NAME: mean
 #+BEGIN_SRC elisp :var error=0 :exports none
 (let ((num-values (length error)))
