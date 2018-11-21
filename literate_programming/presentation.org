@@ -850,6 +850,9 @@ we would be able to use it like this:
 #+TBLFM: $2=deriv($1,x)
 
 ** Summary
+:PROPERTIES:
+#+EXPORT_FILE_NAME: summary.html
+:END:
 #+OPTIONS: num:nil reveal_control:nil toc:nil
 #+OPTIONS: reveal_title_slide:nil reveal_slide_number:nil
 #+REVEAL_THEME: moon
