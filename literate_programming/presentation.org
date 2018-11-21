@@ -73,36 +73,21 @@ We can create a babel block very easily with ~<s~ followed by ~TAB~
 echo "hello there!"
 #+END_SRC
 
-#+RESULTS:
-: hello there!
-
 #+BEGIN_SRC elisp
 (format "hello there")
 #+END_SRC
 
-#+RESULTS:
-: hello there
-
 #+BEGIN_SRC python
 print("hello there")
 #+END_SRC
-
-#+RESULTS:
-: None
 
 #+BEGIN_SRC python
 return "hello there"
 #+END_SRC
 
-#+RESULTS:
-: hello there
-
 #+BEGIN_SRC python :results output
 print("hello there")
 #+END_SRC
-
-#+RESULTS:
-: hello there
 
 *** C
 
@@ -125,16 +110,6 @@ int main()
 }
 #+END_SRC
 
-#+RESULTS:
-: m =
-: 94.0188  89.844 43.5223
-: 49.4383 101.165  86.823
-: 88.3099 29.7551 37.7775
-: m * v =
-: 404.274
-: 512.237
-: 261.153
-
 ** Chain
 
 Mixing text and blocks of code seems to work great from the examples so far.
@@ -144,9 +119,6 @@ sake would like to split up the block further?
 MY_NAME="Niklas"
 echo $MY_NAME
 #+END_SRC
-
-#+RESULTS:
-: Niklas
 
 *** 1
 Let's create a variable
@@ -180,9 +152,6 @@ And let's print it's value
 echo $MY_NAME
 #+END_SRC
 
-#+RESULTS:
-: Niklas
-
 *** 3
 :PROPERTIES:
 :header-args: :session session-python-chain
@@ -200,15 +169,10 @@ def calculate_sum(numbers):
     return sum
 #+END_SRC
 
-#+RESULTS:
-
 #+BEGIN_SRC python :results output
 numbers = [x for x in range(20)]
 print("The sum of the numbers is: " + str(calculate_sum(numbers)))
 #+END_SRC
-
-#+RESULTS:
-: The sum of the numbers is: 190
 
 ** Compose
 
@@ -240,9 +204,6 @@ numbers = [x for x in range(20)]
 print("The sum of the numbers is: " + str(calculate_sum(numbers)))
 #+END_SRC
 
-#+RESULTS:
-: The sum of the numbers is: 190
-
 *** B
 
 But we can also create blocks which returns something simple like a value and
@@ -258,9 +219,6 @@ numbers = [x for x in range(<<python-max-numbers()>>)]
 print("The sum of the numbers is: " + str(calculate_sum(numbers)))
 #+END_SRC
 
-#+RESULTS:
-: The sum of the numbers is: 435
-
 *** C
 
 Why not mix languages as well, ~python~ and ~elisp~ working together
@@ -269,17 +227,11 @@ Why not mix languages as well, ~python~ and ~elisp~ working together
 (/ (* 10 (+ 30 5 2)) 5)
 #+END_SRC
 
-#+RESULTS: elisp-max-numbers
-: 74
-
 #+BEGIN_SRC python :results output :noweb yes
 <<python-calc>>
 numbers = [x for x in range(<<elisp-max-numbers()>>)]
 print("The sum of the numbers is: " + str(calculate_sum(numbers)))
 #+END_SRC
-
-#+RESULTS:
-: The sum of the numbers is: 2701
 
 ** Note taking
 
@@ -512,11 +464,7 @@ docker ps
     (format "/docker:%s:/" (docker-match name-regexp))))
 
 (docker-path "minimal_python")
-(docker-path "minimal_python" "app")
 #+END_SRC
-
-#+RESULTS:
-: /docker:trusting_banzai:/
 
 Create a session which runs from inside the docker
 #+BEGIN_SRC sh :session session-docker-agent :dir (my/docker-path "minimal_python")
@@ -532,30 +480,6 @@ for i in range(20):
 python app.py
 #+END_SRC
 
-#+RESULTS:
-#+begin_example
-i has the value 0
-i has the value 1
-i has the value 2
-i has the value 3
-i has the value 4
-i has the value 5
-i has the value 6
-i has the value 7
-i has the value 8
-i has the value 9
-i has the value 10
-i has the value 11
-i has the value 12
-i has the value 13
-i has the value 14
-i has the value 15
-i has the value 16
-i has the value 17
-i has the value 18
-i has the value 19
-#+end_example
-
 ** Performance analysis
 #+LaTeX_HEADER: \usepackage{minted}
 #+LaTeX_HEADER: \usemintedstyle{paraiso-light}
@@ -566,6 +490,7 @@ instead
 *** Synthesize the data
 Let's use some Emacs lisp to generate the ground truth and the estimates for us:
 
+#+NAME: est-truth-data
 #+BEGIN_SRC emacs-lisp :results value table :post addhdr(*this*) :exports both
   (mapcar (lambda (i)
             (list i (+ (random 4) (- i 2))))
@@ -573,31 +498,30 @@ Let's use some Emacs lisp to generate the ground truth and the estimates for us:
 #+END_SRC
 
 #+CAPTION: Truth and Estimate
-#+NAME: est-truth-data
-#+RESULTS:
+#+RESULTS: est-truth-data
 |-------+----------|
 | Truth | Estimate |
 |-------+----------|
 |     1 |        2 |
 |     2 |        1 |
-|     3 |        3 |
-|     4 |        2 |
-|     5 |        6 |
+|     3 |        4 |
+|     4 |        5 |
+|     5 |        3 |
 |     6 |        7 |
-|     7 |        7 |
+|     7 |        8 |
 |     8 |        9 |
-|     9 |        9 |
+|     9 |        7 |
 |    10 |        9 |
 |    11 |       11 |
-|    12 |       10 |
-|    13 |       14 |
+|    12 |       13 |
+|    13 |       11 |
 |    14 |       15 |
 |    15 |       13 |
 |    16 |       15 |
-|    17 |       15 |
+|    17 |       17 |
 |    18 |       18 |
-|    19 |       18 |
-|    20 |       21 |
+|    19 |       19 |
+|    20 |       19 |
 
 #+name: addhdr
 #+begin_src emacs-lisp :var tbl=""
@@ -633,7 +557,6 @@ plt.savefig('.images/est_vs_truth.png')
 
 #+CAPTION: Tracking the true value
 #+RESULTS:
-[[file:.images/est_vs_truth.png]]
 
 Cool, the performance of the fake algorithm is not that bad. I think we can be
 pretty happy with it. let's see if we can gather some more information about
@@ -701,8 +624,6 @@ return result
   (/ (seq-reduce '+ error 0.0) num-values))
 #+END_SRC
 
-A second try
-
 *** Describe the flow
 
 I would like to describe the flow better. It would be great if we could
@@ -724,7 +645,6 @@ endif
 
 #+CAPTION: The flow of our investigation
 #+RESULTS:
-[[file:.images/flow.png]]
 
 *** Export
 
@@ -897,9 +817,6 @@ We can start of simple with some arithmatic:
 10 + 3 * 5 /2.0
 #+END_SRC
 
-#+RESULTS:
-: 17.5
-
 **** I
 
 But the calculator knows more than that. We can also calculate ~cosine~. It
@@ -909,25 +826,17 @@ somewhere that needs to be set.
 cos(180)
 #+END_SRC
 
-#+RESULTS:
-: -1
-
 **** II
 
 Oh but let's have a look at this equation system, could calc solve that for us
 too?
-#+BEGIN_EXAMPLE
-x*2+x=4,x
-#+END_EXAMPLE
-
-***** A
 
 Yes we can!
 #+BEGIN_SRC calc
 fsolve(x*2+x=4,x)
 #+END_SRC
 
-***** B
+**** III
 
 So wait if we can do that, and it's supported in formulas that would mean that
 we would be able to use it like this:
@@ -957,12 +866,12 @@ we would be able to use it like this:
 *** Blogging with Org-mode
 
 **** The org-mode file
-[[./images/org-hugo3.png]]
+[[./images/org-hugo-file.png]]
 **** The site
-[[./images/org-hugo2.png]]
+[[./images/org-hugo-start.png]]
 **** A post
-[[./images/org-hugo.png]]
+[[./images/org-hugo-post.png]]
 
 *** Thanks for listening
 
-[[./images/org-mode.jpg]]
+[[./images/org-mode-logo.jpg]]

@@ -1,4 +1,4 @@
-% Created 2018-11-19 Mon 17:30
+% Created 2018-11-21 Wed 10:11
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
@@ -14,6 +14,9 @@
 \usepackage{amssymb}
 \usepackage{capt-of}
 \usepackage{hyperref}
+\usepackage{minted}
+\usepackage{minted}
+\usemintedstyle{paraiso-light}
 \author{Niklas Carlsson}
 \date{\today}
 \title{}
@@ -26,27 +29,57 @@
  pdflang={English}}
 \begin{document}
 
-\section*{Investigation}
-\label{sec:orgb877167}
-
+\section*{Performance analysis}
+\label{sec:org348d1cd}
 Let's make a fun little investigation. Assume we have some data of a signal and
 we want to make an algorithm that tracks the 1-d signal. This presentation is a
 little bit too short to make a real algorithm and data in so we will fake it
-instead.
-
+instead
 \subsection*{Synthesize the data}
-\label{sec:org1e53dcf}
+\label{sec:orgfcb1823}
 Let's use some Emacs lisp to generate the ground truth and the estimates for us:
 
-\begin{verbatim}
+\begin{minted}[]{common-lisp}
   (mapcar (lambda (i)
             (list i (+ (random 4) (- i 2))))
           (number-sequence 1 20))
-\end{verbatim}
+\end{minted}
 
-\begin{verbatim}
-(cons '("Truth" "Estimate") (cons 'hline tbl))
-\end{verbatim}
+\begin{table}[htbp]
+\centering
+\begin{tabular}{rr}
+\hline
+Truth & Estimate\\
+\hline
+1 & 2\\
+2 & 3\\
+3 & 2\\
+4 & 4\\
+5 & 5\\
+6 & 5\\
+7 & 7\\
+8 & 7\\
+9 & 10\\
+10 & 11\\
+11 & 10\\
+12 & 11\\
+13 & 13\\
+14 & 12\\
+15 & 13\\
+16 & 14\\
+17 & 16\\
+18 & 16\\
+19 & 18\\
+20 & 20\\
+\end{tabular}
+\caption{\label{tab:org033bc38}
+Truth and Estimate}
+
+\end{table}
+
+\begin{minted}[]{common-lisp}
+(cons 'hline (cons '("Truth" "Estimate") (cons 'hline tbl)))
+\end{minted}
 
 Let's give the results a name so that we can reference the table later. It's
 good to see the data in the table but I often find that some kind of
@@ -54,8 +87,8 @@ visualization is more powerful. It's too bad I don't know how to plot in
 elisp\ldots{} but I do know how to do it in Python.
 
 \subsection*{Visualize estimate and truth}
-\label{sec:orgf804e1c}
-\begin{verbatim}
+\label{sec:org0903e34}
+\begin{minted}[]{python}
 import numpy as np
 import matplotlib
 matplotlib.use('Agg')
@@ -74,7 +107,7 @@ plt.ylabel("Value")
 plt.title("Tracking")
 plt.savefig('.images/est_vs_truth.png')
 '.images/est_vs_truth.png' # return this to org-mode
-\end{verbatim}
+\end{minted}
 
 \begin{figure}[htbp]
 \centering
@@ -87,7 +120,7 @@ pretty happy with it. let's see if we can gather some more information about
 it's performance.
 
 \subsection*{Examine the performance}
-\label{sec:orgddd036f}
+\label{sec:orgb922c60}
 
 \begin{center}
 \begin{tabular}{rrrr}
@@ -115,6 +148,8 @@ Truth & Estimate & Error & Absolute error\\
 19 & 20 & -1 & 1\\
 20 & 21 & -1 & 1\\
 \hline
+Number of values & 20 &  & \\
+Mean error & 0.9 &  & \\
 RMSE & 1.140175425099138 &  & \\
 \hline
 \end{tabular}
@@ -124,41 +159,82 @@ RMSE & 1.140175425099138 &  & \\
 In order to get the values from the other table I am using \href{https://orgmode.org/manual/References.html\#index-remote-references-352}{remote references}. To
 refer to the values of the other table.
 
-Table formulas uses \texttt{Emacs calc} syntax by default. I have a hard time not
+Table
 thinking of \texttt{Windows calc} when I hear this name. But this is something
 different.
 
 Tables also supports \texttt{Emacs lisp} so we can use that to calculate the absolute
-error. Finally it would be nice to get a kpi like \texttt{rmse} to have one number for
+error. Finally it would be nice to get a KPI like \texttt{rmse} to have one number for
 the performance of the algorithm. Since that equation would be quite long in
 Emacs lisp maybe it's time to try something else.
 
 We can actually pass the data from the table into other code blocks, which is a
-supercool. We can therefore create a block with Python code which we pass values
+super cool. We can therefore create a block with Python code which we pass values
 into in order to be able to calculate the \href{https://en.wikipedia.org/wiki/Root-mean-square\_deviation}{rmse}
 
 A second try
 
-
 \subsection*{Describe the flow}
-\label{sec:org7cb3327}
+\label{sec:org33dbfc2}
 
 I would like to describe the flow better. It would be great if we could
 visualize it, perhaps in a flow chart.
 
-
-
-
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.9\linewidth]{.images/flow.png}
+\caption{The flow of our investigation}
+\end{figure}
 
 \subsection*{Export}
-\label{sec:org4fe90be}
+\label{sec:orga13187c}
+
+I think that our investigation here has been a success and it would be great if
+we can share the findings with our colleges. Unfortunately not all of them have
+access to Org-mode and can read the information in this format. Cause as we saw
+before this is just plain text so it won't look as nice outside this
+environment.
+
+Luckily Org-mode supports a lot of different exports. I am thinking for this
+particular use case something common like a \texttt{pdf} would be a good choice. We
+also would like it to look nice and professional so let's make it a \texttt{LaTeX}
+styled pdf.
+
+To export we only need to use the function \texttt{M-x org-latex-export-to-pdf}. There
+are two other alternatives here using \texttt{pandoc} but I didn't find the export as
+good so I will choose the first one.
+
+One thing that did bother me though is that now I exported the file and the next
+step would naturally be to look at the results. If you noticed with pandoc there
+was a function called \texttt{M-x org-pandoc-export-to-latex-pdf-and-open}. I want that
+too cause if we open \texttt{dired} the directory editor we can see that the file is
+indeed here.
+
+But I want this automated, good thing that we are using Emacs then, let's create
+the function we need.
+
 \subsection*{Improve}
-\label{sec:orge848216}
+\label{sec:org427612f}
 
+So I already prepared for this and this is the elisp code we need to have a
+function which also will open the pdf after the export has finished.
 
+\begin{minted}[]{elisp}
+(defun org-latex-export-to-pdf-and-open ()
+"Export current buffer to LaTeX then process through to PDF and open the
+resulting file"
+  (interactive)
+  (let* ((file-name (file-name-nondirectory buffer-file-name))
+        (name (file-name-sans-extension file-name)))
+  (org-latex-export-to-pdf)
+  (find-file (concat name ".pdf"))))
+\end{minted}
 
-\subsection*{Appendix}
-\label{sec:org65ccf9d}
+We can see that it has the name \texttt{pdf-and-open}. Firstly it retrieves the name of
+the current file, without the extension. Then it calls the regular function and
+lastly opens the exported PDF.
 
-I feel that the Emacs calculator requires some more data
+To install it I just open it in the popup buffer and evaluate the function and
+now when I search through \texttt{M-x} I will find the function and it will do exactly
+what we want.
 \end{document}
