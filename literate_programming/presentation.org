@@ -476,6 +476,20 @@ let's investigate another route ...
 
 *** Improve it II
 
+Start the docker image
+#+BEGIN_SRC sh :session session-docker-background
+docker run -it minimal_python /bin/sh
+#+END_SRC
+
+Verify that it runs
+#+BEGIN_SRC sh :results output
+docker ps
+#+END_SRC
+
+#+RESULTS:
+: CONTAINER ID        IMAGE               COMMAND             CREATED              STATUS              PORTS               NAMES
+: a419a15347b5        minimal_python      "/bin/sh"           About a minute ago   Up About a minute                       trusting_bardeen
+
 #+BEGIN_SRC elisp
 (defun docker-match (name-regexp)
   ;; return the name of the last docker image which matches the input
@@ -504,22 +518,18 @@ let's investigate another route ...
 #+RESULTS:
 : /docker:trusting_banzai:/
 
-#+BEGIN_SRC sh :session session-docker-agent :dir (my/docker-path "minimal_python" "app")
+Create a session which runs from inside the docker
+#+BEGIN_SRC sh :session session-docker-agent :dir (my/docker-path "minimal_python")
 ls
 #+END_SRC
 
-#+RESULTS:
-|                                          |
-| $ [0;0mapp.py[m   [0;0mapp2.py[m |
-
-
-#+BEGIN_SRC python :tangle (my/docker-path "minimal_python" "app/app3.py")
+#+BEGIN_SRC python :tangle (my/docker-path "minimal_python" "app/app.py")
 for i in range(20):
     print("i has the value " + str(i))
 #+END_SRC
 
 #+BEGIN_SRC sh :session session-docker-agent :results output
-python app3.py
+python app.py
 #+END_SRC
 
 #+RESULTS:
