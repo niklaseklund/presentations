@@ -1,4 +1,4 @@
-* Literate programming in Org-mode
+* Org-mode and literate programmming
 ** TODO Org-mode
 
 The first thing I will do is to show how an ~.org~ file looks in
@@ -936,12 +936,23 @@ we would be able to use it like this:
 #+REVEAL_THEME: moon
 #+REVEAL_TRANS: slide
 
-*** What have we learnt?
+*** Org-mode + literate programming
 
-- Org-mode makes it easy to get your information in context
-- Org-mode makes it easy to export your documents into reports or presentations
+#+ATTR_REVEAL: :frag (roll-in)
+- ~Context~ (connect everything needed)
+- ~Documentation~ (made easy)
+- ~Hackable~ (change what we don't like)
+- ~Exports~ (replaces other programs)
 
-*** One more thing ... :noexport:
+*** Blogging with Org-mode
 
-Link to blog post
+**** The org-mode file
+[[./images/org-hugo3.png]]
+**** The site
+[[./images/org-hugo2.png]]
+**** A post
+[[./images/org-hugo.png]]
 
+*** Thanks for listening
+
+[[./images/org-mode.jpg]]
