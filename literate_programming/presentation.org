@@ -506,6 +506,18 @@ session and previous block.
 I am thinking that it would work to have a function which can grab the
 information and combine it with a ~yasnippet~.
 
+**** Create a custom snippet
+
+First I created a snippets folder as instructed (I got an error not doing that).
+Inside ~.config/doom/snippets/org-mode~. I then called ~M-x yas-new-snippet~ to
+create a new snippet and manually set the filename to something that could
+reside in the newly created folder. I should check if there are any naming
+conventions that I should adhere to. I found some interesting [[https://joaotavora.github.io/yasnippet/snippet-development.html][snippet examples]].
+
+#+BEGIN_EXAMPLE
+
+#+END_EXAMPLE
+
 ** Performance analysis
 :PROPERTIES:
 #+EXPORT_FILE_NAME: presentation.pdf
