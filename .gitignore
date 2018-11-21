@@ -1,7 +1,7 @@
 /.DS_Store
 /vim_for_beginners/presentation.html
 
-/literate_programming/.auctex-auto/presentation.el
+/literate_programming/.auctex-auto/
 /literate_programming/.images/
 /literate_programming/docker_image/
 /literate_programming/_minted-presentation/
