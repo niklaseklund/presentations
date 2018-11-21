@@ -480,6 +480,31 @@ for i in range(20):
 python app.py
 #+END_SRC
 
+*** Improve it III
+
+An idea from the presentation to be able to create new code blocks with the same
+session and previous block.
+#+BEGIN_SRC elisp
+(defun my/org-babel-new-last-block ()
+  (interactive)
+  (save-excursion
+    (let ((session-name nil)
+          (language nil))
+      (while (and (re-search-backward org-babel-src-block-regexp nil t) (not session-name))
+        (goto-char (match-beginning 0))
+        (let* ((this-info (org-babel-get-src-block-info))
+               (this-lang (nth 0 this-info))
+               (this-params (nth 2 this-info))
+               (this-session (cdr (assoc :session this-params))))
+          (when (not (string= "none" this-session))
+            (setq session-name this-session)
+            (setq language this-lang))))
+      (format "%s :session %s" language session-name))))
+#+END_SRC
+
+I am thinking that it would work to have a function which can grab the
+information and combine it with a ~yasnippet~.
+
 ** Performance analysis
 :PROPERTIES:
 #+EXPORT_FILE_NAME: presentation.pdf
