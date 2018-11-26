@@ -719,7 +719,7 @@ To install it I just open it in the popup buffer and evaluate the function and
 now when I search through ~M-x~ I will find the function and it will do exactly
 what we want.
 
-*** Appendix: Emacs Calc :noexport:
+*** Appendix: Emacs Calc
 
 Now I thought that this article deserved some bonus information about Emacs
 calculator. I knew about it before but writing this part got me interested into
@@ -764,6 +764,78 @@ we would be able to use it like this:
 
 The conclusion is that the Emacs calc is indeed very powerful and the reputation
 of being the [[https://florian.adamsky.it/2016/03/31/emacs-calc-for-programmers-and-cs.html][poor man's mathematica]] does indeed seem to be true.
+
+*** Appendix: Octave
+
+It's of course possible to utilize [[https://orgmode.org/worg/org-contrib/babel/languages/ob-doc-octave-matlab.html][Octave]] in Org-mode as well. Here is an
+example passing our synthetic data into a block
+#+BEGIN_SRC octave :results output :var data=est-truth-data[1:-1, 0:1]
+data
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+data =
+
+    1    1
+    2    3
+    3    1
+    4    4
+    5    3
+    6    6
+    7    8
+    8    7
+    9    7
+   10   11
+   11   11
+   12   10
+   13   11
+   14   12
+   15   15
+   16   14
+   17   17
+   18   16
+   19   17
+   20   21
+
+ans =  20
+#+end_example
+
+We can also plot with Octave and generate figures that are automatically
+inserted back into the document.
+#+BEGIN_SRC octave :results file :exports results
+figure( 1, "visible", "off" );
+sombrero;
+print -dpng .images/chart.png;
+ans = ".images/chart.png";
+#+END_SRC
+
+#+CAPTION: Octave cool plot
+#+RESULTS:
+[[file:.images/chart.png]]
+
+That means that one can operate on the data and utilize Octave to visualize the
+data for example. And with the right paramter [[https://octave.org/doc/v4.2.0/Printing-and-Saving-Plots.html][see documentation]] we can specify
+the size of the output file.
+#+BEGIN_SRC octave :results file :var data=est-truth-data[1:-1, 0:1] :exports results
+truth = data(:, 1)
+estimate = data(:, 2)
+samples = linspace(1, 20, length(data))'
+
+figure( 1, "visible", "off" );
+hold on
+plot(samples, truth, 'g-')
+plot(samples, estimate, 'r-x')
+print -dpng .images/performance.png -S400;
+ans = ".images/performance.png";
+#+END_SRC
+
+#+CAPTION: Octave results plot
+#+RESULTS:
+[[file:.images/performance.png]]
+
+
+
 ** Summary
 :PROPERTIES:
 #+EXPORT_FILE_NAME: summary.html
