@@ -1,4 +1,5 @@
 * Org-mode and literate programmming
+
 ** TODO Org-mode
 
 The first thing I will do is to show how an ~.org~ file looks in
@@ -32,14 +33,11 @@ Good to know commands in Org-mode
 ** Literate programming
 
 When I started to use Emacs I found the talk from ~Howard Abrams~, [[https://www.youtube.com/watch?v=dljNabciEGg][Literate
-Devops with Emacs]], in which he talked about the art of literate programming.
-Howard is an inspiration for me in general since I often find he has some novel
-and well thought through ideas.
+Devops with Emacs]], in which he talked about literate programming in Emacs using
+Org-mode.
 
-He has another blog post, [[http://www.howardism.org/Technical/Emacs/literate-programming-tutorial.html][introduction to Literate Programming]], which I was very
-inspired when writing this post. I will try to make it my own take on his post
-since I will focus on the aspects that I currently use org-mode for when it
-comes to literate programming.
+He has another blog post, [[http://www.howardism.org/Technical/Emacs/literate-programming-tutorial.html][introduction to Literate Programming]], which inspired
+when making this presentation.
 
 [[https://en.wikipedia.org/wiki/Literate_programming][Literate programming]] for me is the possibility to mix text and code. I think the
 thought of having code to be self explanatory as much is possible is good, and
@@ -51,18 +49,17 @@ how something work to somebody else.
 
 
 *** Babel
-One way of indulging into literate programming is to utilize [[https://orgmode.org/worg/org-contrib/babel/][Babel, active code
-in Org-mode]]. This makes it possible to create code blocks that can be mixed with
-regular text. For anyone that has tried out these python notebooks might be
-familiar with this.
+To make Org-mode sing with literate programming we use an extension called
+babel, [[https://orgmode.org/worg/org-contrib/babel/][Babel, active code in Org-mode]]. Babel makes it possible to create code
+blocks that can be mixed with regular text.
 
 One of the benefits of babel is that it supports many languages and they can all
 be included within the same org document. For me personally these languages
-includes ~C++~, ~Python~, ~Shell~ and ~Elisp~. Since I am not an expert in any
-of these languages I often end up in situations where I want to experiment and
-document my progress it's great that they all can be used within the same tool.
-Another great benefit is that org documents are plain text documents they are
-easy to version control and are safe proof for the future.
+includes ~C++~, ~Python~, ~Shell~ and ~Elisp~. I often find myself in situations
+where I want to experiment and document my progress it's great that they all can
+be used within the same tool. Another great benefit is that org documents are
+plain text documents they are easy to version control and are safe proof for the
+future.
 
 *** A
 
@@ -159,7 +156,7 @@ echo $MY_NAME
 :END:
 
 This works with other languages that supports [[https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop][interactive
-repls]](read-eval-print-loop).
+repls]](read-eval-print-loop), like Python.
 
 #+BEGIN_SRC python :results output
 def calculate_sum(numbers):
@@ -177,11 +174,11 @@ print("The sum of the numbers is: " + str(calculate_sum(numbers)))
 
 ** Compose
 
-Chaining blocks through ~sessions~ as we saw where useful for some types of
-languages like ~python~ and ~shells~. But that is not the only way. For me it
-can make sense to make the blocks as small as needed. That might differ
-depending on context. So we shall look more into how to compose different
-blocks. This is a feature called ~noweb~.
+Chaining blocks through ~sessions~ is useful for some types of languages like
+~python~ and ~shells~. But that is not the only way. For me it can make sense to
+make the blocks as small as needed. That might differ depending on context. So
+we shall look more into how to compose different blocks. This is a feature
+called ~noweb~.
 
 *** A
 
@@ -238,13 +235,6 @@ print("The sum of the numbers is: " + str(calculate_sum(numbers)))
 
 I started to take notes with Org-mode and soon I found myself reading a
 programming book and realized how greatly suited Org is for that use case.
-
-I will open my notes file that I have and navigate to a section with notes from
-the book
-
-With Org-mode I can then easily take notes and experiment with the programming
-examples that exists in the book. For me that is a perfect match which makes it
-much easier for me to grasp the concepts.
 
 However now when I am reading the notes in hindsight they aren't as clear as
 they where when I took them. I think what I am missing is the actual context
@@ -360,7 +350,6 @@ For more examples and ideas, visit:
 Perfect, we have a working docker installation. Now let's build ourselves an image.
 
 
-
 *** Build an image
 :PROPERTIES:
 :header-args: :results output :mkdirp yes
@@ -424,7 +413,7 @@ Nice, let's try the image
 docker run minimal_python
 #+END_SRC
 
-Oh no ... There is an issue. The python code we wrote where not compatible, let's
+Oh no ... There is an issue. The application is not compatible with Python3, let's
 go back and fix that. One way would be to fix the source code, tangle all the
 blocks and rebuild the image to see if it works. That approach would work but
 let's investigate another route ...
@@ -445,6 +434,9 @@ docker ps
 : CONTAINER ID        IMAGE               COMMAND             CREATED              STATUS              PORTS               NAMES
 : a419a15347b5        minimal_python      "/bin/sh"           About a minute ago   Up About a minute                       trusting_bardeen
 
+We need to install this function into our Emacs. That is done by adding it to
+our ~.emacs.d~ folder. This function makes it possible to provide a name of an
+image and get back the current nick-name for that running image.
 #+BEGIN_SRC elisp
 (defun docker-match (name-regexp)
   ;; return the name of the last docker image which matches the input
@@ -469,16 +461,20 @@ docker ps
 (docker-path "minimal_python")
 #+END_SRC
 
-Create a session which runs from inside the docker
+Create a session which runs from inside the docker. Here we utilize the function
+we just added to set the :dir. This utilizes TRAMP to execute the block inside
+the Docker image.
 #+BEGIN_SRC sh :session session-docker-agent :dir (my/docker-path "minimal_python")
 ls
 #+END_SRC
 
+We can now tangle the file directly into the running image
 #+BEGIN_SRC python :tangle (my/docker-path "minimal_python" "app/app.py")
 for i in range(20):
     print("i has the value " + str(i))
 #+END_SRC
 
+And run it
 #+BEGIN_SRC sh :session session-docker-agent :results output
 python app.py
 #+END_SRC
@@ -487,9 +483,6 @@ python app.py
 :PROPERTIES:
 #+EXPORT_FILE_NAME: presentation.pdf
 :END:
-
-#+LaTeX_HEADER: \usepackage{minted}
-#+LaTeX_HEADER: \usemintedstyle{paraiso-light}
 
 Let's make a fun little investigation. Assume we have some data of a signal and
 we want to make an algorithm that tracks the 1-d signal. This presentation is a
@@ -694,6 +687,14 @@ indeed here.
 But I want this automated, good thing that we are using Emacs then, let's create
 the function we need.
 
+**** Optional
+To export with syntax highlight for the code blocks we need to add
+#+BEGIN_EXAMPLE
+#+LaTeX_HEADER: \usepackage{minted}
+#+LaTeX_HEADER: \usemintedstyle{paraiso-light}
+#+END_EXAMPLE
+To the top of the ~Performance analysis~
+
 *** Improve the export
 
 So I already prepared for this and this is the elisp code we need to have a
@@ -718,7 +719,7 @@ To install it I just open it in the popup buffer and evaluate the function and
 now when I search through ~M-x~ I will find the function and it will do exactly
 what we want.
 
-*** Appendix: Emacs Calc
+*** Appendix: Emacs Calc :noexport:
 
 Now I thought that this article deserved some bonus information about Emacs
 calculator. I knew about it before but writing this part got me interested into
