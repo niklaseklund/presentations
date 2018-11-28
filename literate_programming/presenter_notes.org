@@ -1,0 +1,166 @@
+#+TITLE: presenter_notes
+
+* Org-mode, literate programming in Emacs
+
+** Org-mode
+
+- Emacs uses different modes, ~cpp-files~ uses ~c++-mode~
+- Org-mode is used in Emacs for ~org-files~
+- Content of an org-file is plain text
+- We can have different lists, links, tags, and tables
+
+~In Org-mode~
+- New list items
+- New headings
+- Links
+- New table information
+- Close TODO
+
+** Literate programming
+
+- Literate programming for me is the ability to mix code and regular text
+- I got into Emacs by using Org-mode as my advance notebook
+- I have found many inspiring texts and presentations on the internet.
+  Especially from ~Howard Abrams~
+- ~Babel~ extension provides literate programming capabilites
+
+*** Source code blocks
+
+Create a block with ~<s~
+
+- shell ~ls~
+- elisp ~hello-world~
+- python ~hello-world~ (print vs output results)
+- cpp ~hell o-world~ (more code use popup)
+- ~Ex1:~ cpp Eigen example (more advanced)
+
+** Chaining
+
+- Mixing text and code ~how to control the granuality?~
+- ~Ex2:~ splitting it up ~doesn't work~
+- ~Ex3:~ solution
+- ~Ex4:~ python, utilizing header-args, use subheading
+
+** Composing
+
+- Not all languages supports session
+- How to connect blocks with ~noweb~
+- ~Ex5:~ python, inline with noweb
+- ~Ex6:~ python + elisp, inline and value with noweb
+
+** Note taking
+
+- Org is an ~excellent tool when studying programming~
+- ~Global links~ to navigate to other documents
+- ~Ex7:~
+- ~Context~~ is missing, the book is the missing piece
+- ~Org-Noter~, solves this problem
+- Linking to parts of files is more useful, use ~Org-capture~
+- Look at ~org-capture~~ source code with ~find-file~
+
+** Our own image
+
+*** Build an image
+- I want to build my own Docker image and deploy an application on it
+- ~Ex8~ requirements, I want it to be tangled
+ ~:tangle docker_image/requirements.txt~
+- ~Ex9~ dockerfile, I want to split it up and add comments, mix noweb and tangle
+- application is self explenatory
+- creating the image
+
+*** Improve it
+
+We need to fix the issue. We could go back to the application make some changes
+and rebuild the image to see if we solved the issue. That sounds a bit slow
+though, let's see if we can improve that workflow.
+
+I wan to be able to make changes directly into a running docker image.
+
+- ~Ex10~ start the docker and verify that it runs
+- We saw before sudo, that was using TRAMP ~(Transparent, Remote, Access,
+  Multiple Protocols)~
+- ~Ex11~ run this block to show the tramp complient path
+- ~Ex12~ elisp code can be used in header arguments
+- ~Ex13~ tangle to running image
+  ~solution: use print() instead of print~
+- ~Ex14~ get the previous session name
+- ~Ex15~ snippet solution
+    Finding the name with the function seems to work. But how can we use that?
+Add ~`(my/org-babel-previous-session)`~ to the snippet to have a working solution
+- Create a previous session block add ~:results output~
+  the content should be ~python app.py~
+
+** Performance analysis
+
+*** Data generation
+- ~Ex16~ elisp block with code to generate data
+- Add name and caption to table
+  + #+NAME: est-truth-data
+  + #+CAPTION: Truth and estimate
+- ~Ex17~ change formating of output with post
+  + add ~:post add-header(*this*)~
+*** Visualization
+- ~Ex18~ I like visualization for clarity, I know how to plot in ~python~
+- ~Ex19~ and in ~octave~ if I am in to that
+*** Performance numbers
+- Pull up the table formulas with ~C-c '~
+- Look at the different functions, ~calc~, and ~elisp~ is used
+- ~Ex20~ Mean error in the table, use a elisp block
+- ~Ex21~ RMSE in the table, use a python block
+*** Describe the flow
+- ~Ex22~ Sometimes it's good to be able to describe the flow
+  + add a caption ~The flow of the investigation~
+*** Emacs Calc
+- ~Emacs calc~ just mentioned briefly, but it's more powerful then I thought
+
+#+BEGIN_SRC calc
+10 + 3 * 5 /2.0
+#+END_SRC
+
+#+BEGIN_SRC calc
+cos(180)
+#+END_SRC
+
+Solve the ~x*2+x=4~ equation
+#+BEGIN_SRC calc
+x*2+x=4
+
+
+fsolve(x*2+x=4,x)
+#+END_SRC
+
+Or how about a derivation
+#+BEGIN_SRC calc
+deriv(sqrt(x),x)
+#+END_SRC
+
+#+RESULTS:
+: 0.5 / sqrt(x)
+
+- ~Ex23~ table derivation
+  formula: ~$2=deriv($1,x)~
+*** Export
+
+Now when we have made these awesome discoveries it would be nice to share it
+with our colleges. Pdf latex is nice!
+
+Too bad it doesn't seem to export correctly
+
+*** Improve the export :noexport:
+- ~Ex24~
+
+** Summary
+- Use ~org-revel-export-to-html~
+** Blogging
+
+- Follow global link to the post
+- Navigate to ~terminal~ and start hugo server
+- Open ~Firefox~ and navigate to local host
+- Show the post
+- Go back to ~Emacs~ and the post and mark as done
+- Back to ~firefox~
+- We want to publish it for everyone to share. Use ~deploy.sh~
+- Navigate to real site and wait
+
+
+Hope that you have find this video inspiring and thanks for watching!
