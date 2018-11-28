@@ -160,6 +160,12 @@ Too bad it doesn't seem to export correctly
 - Use ~org-revel-export-to-html~
 ** Blogging
 
+Create a new entry
+*** TODO Open exported PDF :emacs:org_mode:elisp:
+:PROPERTIES:
+:EXPORT_FILE_NAME: org-export-pdf-latex
+:END:
+
 - Insert ~ex25~
 - Insert ~ex26~
 - Follow global link to the post
@@ -173,4 +179,3 @@ Too bad it doesn't seem to export correctly
 
 
 Hope that you have find this video inspiring and thanks for watching!
-
