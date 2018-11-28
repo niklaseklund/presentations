@@ -481,7 +481,7 @@ python app.py
 
 ** Performance analysis
 :PROPERTIES:
-#+EXPORT_FILE_NAME: presentation.pdf
+#+EXPORT_FILE_NAME: original_presentation.pdf
 :END:
 
 Let's make a fun little investigation. Assume we have some data of a signal and

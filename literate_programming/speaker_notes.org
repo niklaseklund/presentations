@@ -1,4 +1,4 @@
-#+TITLE: presenter_notes
+#+TITLE: speaker_notes
 
 * Org-mode, literate programming in Emacs
 
@@ -160,6 +160,8 @@ Too bad it doesn't seem to export correctly
 - Use ~org-revel-export-to-html~
 ** Blogging
 
+- Insert ~ex25~
+- Insert ~ex26~
 - Follow global link to the post
 - Navigate to ~terminal~ and start hugo server
 - Open ~Firefox~ and navigate to local host
@@ -172,7 +174,3 @@ Too bad it doesn't seem to export correctly
 
 Hope that you have find this video inspiring and thanks for watching!
 
-* Todo
-remove the .images folder
-make sure export works in Arch for pdf
-make sure that starting the hugo server works
