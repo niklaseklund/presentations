@@ -1,0 +1,267 @@
+* Org-mode and literate programmming
+
+** TODO Org-mode :emacs:org_mode:
+
+The first thing I will do is to show how an ~.org~ file looks in
+fundamental-mode. It's actually nothing more than a text file. To know more
+about Org-mode visit the [[https://orgmode.org/][org-mode-site]].
+
+*** Content
+
+Here are some of the basics we can have a look at:
+
+- Headings, how to create them and change them
+- What kinds of lists are supported
+- How tables look like
+- TODO:s
+
+
+**** My favorite things
+1) That it's just plain text files
+2) It's automatic adjustments
+
+**** Commands
+
+Good to know commands in Org-mode
+
+| Command           | Action          |
+|-------------------+-----------------|
+| Tab heading       | Demotes heading |
+| Shift-Tab heading | Promote heading |
+| C-Enter           |                 |
+| M-Enter           |                 |
+
+** Literate programming
+
+
+~Ex1~
+
+** Chain
+
+This is how to create a variable in bash and how to check it's value:
+#+BEGIN_SRC sh :results output
+MY_NAME="Niklas"
+echo $MY_NAME
+#+END_SRC
+
+~Ex2~
+
+~Ex3~
+
+*** Example 4
+:PROPERTIES:
+:header-args: :session session-python-chain
+:END:
+
+~Ex4~
+** Compose
+
+Chaining blocks through ~sessions~ is useful for some types of languages like
+~python~ and ~shells~. But that is not the only way. For me it can make sense to
+make the blocks as small as needed. That might differ depending on context. So
+we shall look more into how to compose different blocks. This is a feature
+called ~noweb~.
+
+
+Let's take the previous python example.
+
+~Ex5~
+
+~Ex6~
+
+** Note taking
+
+~Ex7~
+** Our own image
+
+I want to build my own [[https://www.docker.com][Docker]] image and deploy an application on that image.
+These are the steps to make this happen:
+
+#+BEGIN_SRC sh :dir "/sudo::" :results none
+sudo systemctl start docker
+#+END_SRC
+
+*** Build an image
+:PROPERTIES:
+:header-args: :results output :mkdirp yes
+:END:
+
+I would like to build a docker image with ~Python3~ installed so that I can run
+my python3 code. I got the inspiration from this [[https://blog.realkinetic.com/building-minimal-docker-containers-for-python-applications-37d0272c52f3][minimal docker image]] example.
+
+**** Requirements
+
+~Ex8~
+
+**** Dockerfile
+
+The ~Dockerfile~ specifying the commands for building the image looks like this:
+#+BEGIN_SRC text
+FROM python:3.6-alpine
+
+COPY requirements.txt /
+
+RUN pip install -r /requirements.txt
+
+COPY src/ /app
+WORKDIR /app
+
+CMD ["python", "app.py"]
+#+END_SRC
+
+~Ex9~
+**** The application
+
+This is my application that I want to deploy in the docker
+#+BEGIN_SRC python :tangle docker_image/src/app.py
+for i in range(20):
+    print "i has the value " + str(i)
+#+END_SRC
+
+**** Create the image
+
+#+BEGIN_SRC sh :dir docker_image
+docker build -t minimal_python .
+#+END_SRC
+
+First we verify that the image is now available among the docker images
+#+BEGIN_SRC sh
+docker images
+#+END_SRC
+
+Nice, let's try the image
+#+BEGIN_SRC sh
+docker run minimal_python
+#+END_SRC
+
+*** Improve it
+
+~Ex10~
+
+~Ex11~
+
+~Ex12~
+
+~Ex13~
+
+~Ex14~
+
+~Ex15~
+
+** Performance analysis
+:PROPERTIES:
+#+EXPORT_FILE_NAME: presentation.pdf
+#+LaTeX_HEADER: \usepackage{minted}
+#+LaTeX_HEADER: \usemintedstyle{paraiso-light}
+:END:
+
+Let's make a fun little investigation. Assume we have some data of a signal and
+we want to make an algorithm that tracks the 1-d signal. This presentation is a
+little bit too short to make a real algorithm and data in so we will fake it
+instead
+
+*** Synthesize the data
+
+~Ex16~
+
+~Ex17~
+
+*** Visualize estimate and truth
+
+~Ex18~
+
+~Ex19~
+
+*** Performance numbers
+
+A table can be a good way of displaying the data that we have and analyze the
+values. Tables in Emacs can use ~calc~ syntax org ~elisp~ code to make the table
+formulas.
+
+#+CAPTION: Evaluation numbers
+|------------------+--------------------+-------+----------------|
+|            Truth |           Estimate | Error | Absolute error |
+|------------------+--------------------+-------+----------------|
+|                1 |                  2 |    -1 |              1 |
+|                2 |                  1 |     1 |              1 |
+|                3 |                  4 |    -1 |              1 |
+|                4 |                  5 |    -1 |              1 |
+|                5 |                  3 |     2 |              2 |
+|                6 |                  7 |    -1 |              1 |
+|                7 |                  8 |    -1 |              1 |
+|                8 |                  9 |    -1 |              1 |
+|                9 |                  7 |     2 |              2 |
+|               10 |                  9 |     1 |              1 |
+|               11 |                 11 |     0 |              0 |
+|               12 |                 13 |    -1 |              1 |
+|               13 |                 11 |     2 |              2 |
+|               14 |                 15 |    -1 |              1 |
+|               15 |                 13 |     2 |              2 |
+|               16 |                 15 |     1 |              1 |
+|               17 |                 17 |     0 |              0 |
+|               18 |                 18 |     0 |              0 |
+|               19 |                 19 |     0 |              0 |
+|               20 |                 19 |     1 |              1 |
+|------------------+--------------------+-------+----------------|
+| Number of values |                 20 |       |                |
+|       Mean error |                0.2 |       |                |
+|             RMSE | 1.1832159566199232 |       |                |
+|------------------+--------------------+-------+----------------|
+#+TBLFM: @2$1..@21$1='(identity remote(est-truth-data, @@#$1))::@2$2..@21$2='(identity remote(est-truth-data, @@#$2))::@2$3..@21$3=$1-$2::@2$4..@21$4='(abs (- $1 $2));N::@22$2='(length (list @2$4..@21$4));N::@23$2='(org-sbe "mean" (error @2$3..@21$3))::@24$2='(org-sbe "rmse" (estimate @2$1..@21$1) (truth @2$2..@21$2))
+
+In order to get the values from the other table I am using [[https://orgmode.org/manual/References.html#index-remote-references-352][remote references]]. To
+refer to the values of the other table. The formulas that the table accepts
+should either follow the ~calc~ syntax or ~elisp~.
+
+~Ex20~
+
+~Ex21~
+
+*** Describe the flow
+
+~Ex22~
+
+*** Emacs Calc
+
+Now I thought that this article deserved some bonus information about Emacs
+calculator. I knew about it before but writing this part got me interested into
+knowing more. And I think that it was a good example of one of the aspects that
+I love about Org-mode which is to be able to experiment. I found some useful
+[[https://github.com/dfeich/org-babel-examples/blob/master/calc/calc.org][calc-babel-examples]] and [[http://ehneilsen.net/notebook/orgExamples/org-examples.html][org-examples]] which I took inspiration from.
+
+
+Yes we can!
+#+BEGIN_SRC calc
+fsolve(x*2+x=4,x)
+#+END_SRC
+
+~Ex23~
+
+~Ex24~
+
+** Summary
+:PROPERTIES:
+#+EXPORT_FILE_NAME: summary.html
+:END:
+#+OPTIONS: num:nil reveal_control:nil toc:nil
+#+OPTIONS: reveal_title_slide:nil reveal_slide_number:nil
+#+REVEAL_THEME: black
+#+REVEAL_TRANS: slide
+
+*** Org-mode + literate programming
+
+#+ATTR_REVEAL: :frag (roll-in)
+- ~Context~ (connect everything needed)
+- ~Documentation~ (made easy)
+- ~Hackable~ (change what we don't like)
+- ~Exports~ (replaces other programs)
+
+*** Thanks for listening
+
+[[./images/org-mode-logo.jpg]]
+*** The End? ...
+[[./images/org-hugo-last.jpg]]
+*** Blogging :noexport:
+
+Let's turn something that we have made here into a blog post :)
+[[file:~/opensource/emacs-blog/content-org/content.org::*Org%20export%20pdf%20latex][Org export pdf latex]]
