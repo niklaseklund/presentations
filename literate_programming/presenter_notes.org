@@ -39,7 +39,14 @@ Create a block with ~<s~
 - Mixing text and code ~how to control the granuality?~
 - ~Ex2:~ splitting it up ~doesn't work~
 - ~Ex3:~ solution
+
+*** Make a python example in a subheading
+:PROPERTIES:
+:header-args: :session session-python-chain
+:END:
+
 - ~Ex4:~ python, utilizing header-args, use subheading
+~:header-args: :session session-python-chain~
 
 ** Composing
 
@@ -164,3 +171,8 @@ Too bad it doesn't seem to export correctly
 
 
 Hope that you have find this video inspiring and thanks for watching!
+
+* Todo
+remove the .images folder
+make sure export works in Arch for pdf
+make sure that starting the hugo server works
