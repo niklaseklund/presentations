@@ -18,6 +18,11 @@
 
 ** Literate programming
 
+Inspiration:
+Howard Abrams
+Harry Scwartz
+Mike Zimansky
+
 - Literate programming for me is the ability to mix code and regular text
 - I got into Emacs by using Org-mode as my advance notebook
 - I have found many inspiring texts and presentations on the internet.
@@ -28,11 +33,24 @@
 
 Create a block with ~<s~
 
-- shell ~ls~
-- elisp ~hello-world~
+- shell ~ls~ and ~cd~
+- elisp ~hello-world~ (format "")
 - python ~hello-world~ (print vs output results)
 - cpp ~hell o-world~ (more code use popup)
+  #+BEGIN_SRC cpp
+ #include <iostream>
+
+int main() {
+    std::cout << "Hello there" << std::endl;
+    return 0;
+}
+  #+END_SRC
+
+  #+RESULTS:
+  : Hello there
+
 - ~Ex1:~ cpp Eigen example (more advanced)
+
 
 ** Chaining
 
@@ -57,7 +75,7 @@ Create a block with ~<s~
 
 ** Note taking
 
-- Org is an ~excellent tool when studying programming~
+ Org is an ~excellent tooexl when studying programming~
 - ~Global links~ to navigate to other documents
 - ~Ex7:~
 - ~Context~~ is missing, the book is the missing piece
@@ -86,6 +104,10 @@ I wan to be able to make changes directly into a running docker image.
 - ~Ex10~ start the docker and verify that it runs
 - We saw before sudo, that was using TRAMP ~(Transparent, Remote, Access,
   Multiple Protocols)~
+- Show with find-file
+  /docker:nick_name:/
+- Show with eshell
+  cd /docker:nick_name:/
 - ~Ex11~ run this block to show the tramp complient path
 - ~Ex12~ elisp code can be used in header arguments
 - ~Ex13~ tangle to running image
@@ -158,9 +180,29 @@ Too bad it doesn't seem to export correctly
 
 ** Summary
 - Use ~org-revel-export-to-html~
+- Context,
+  + make things come together,
+  + make notes that exists with your code
+  + include links to other files etc
+- Documentation
+  + it's very easy to track the way you are doing things
+- Improvise
+  + for me org-mode is very much about the sky is the limit
+  + come up with new ways, mix languages, etc
+- Emacs (hackable)
+  + emacs-lisp, it's been a red thread throughout the presentation
+  + it's not possible to talk about Org-mode without mentioning the Emacs way
+- Exports
+  + You can make Org files your pdf latex files, your presenations and
+    your markdown
+
 ** Blogging
 
 Create a new entry
+#+BEGIN_SRC sh
+hugo server -D
+#+END_SRC
+
 *** TODO Open exported PDF :emacs:org_mode:elisp:
 :PROPERTIES:
 :EXPORT_FILE_NAME: org-export-pdf-latex
