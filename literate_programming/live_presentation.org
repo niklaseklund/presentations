@@ -207,17 +207,16 @@ I love about Org-mode which is to be able to experiment. I found some useful
 *** Org-mode + literate programming
 
 #+ATTR_REVEAL: :frag (roll-in)
-- ~Context~ (connect everything needed)
-- ~Documentation~ (made easy)
-- ~Hackable~ (change what we don't like)
-- ~Exports~ (replaces other programs)
+- ~Context~
+- ~Documentation~
+- ~Emacs~
+- ~Exports~
 
 *** Thanks for listening
 
 [[./images/org-mode-logo.jpg]]
-*** The End? ...
-[[./images/org-hugo-last.jpg]]
-*** Blogging :noexport:
+
+**** Blogging :noexport:
 
 Let's turn something that we have made here into a blog post :)
-[[file:~/src/emacs-blog/content-org/content.org::*Org%20export%20pdf%20latex][Org export pdf latex]]
+[[file:~/src/emacs-blog/content-org/content.org::*Create%20a%20new%20session%20block][Blogging with Org-mode]]
