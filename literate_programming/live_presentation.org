@@ -128,7 +128,7 @@ docker run minimal_python
 
 ** Performance analysis
 :PROPERTIES:
-#+EXPORT_FILE_NAME: new_presentation_stripped.pdf
+#+EXPORT_FILE_NAME: live_presentation.pdf
 #+LaTeX_HEADER: \usepackage{minted}
 #+LaTeX_HEADER: \usemintedstyle{paraiso-light}
 :END:
