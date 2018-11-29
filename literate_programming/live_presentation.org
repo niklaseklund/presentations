@@ -1,6 +1,6 @@
 * Org-mode, literate programming in Emacs
 
-** TODO Org-mode :emacs:org_mode:
+** Org-mode :emacs:org_mode:
 
 The first thing I will do is to show how an ~.org~ file looks in
 fundamental-mode. It's actually nothing more than a text file. To know more
