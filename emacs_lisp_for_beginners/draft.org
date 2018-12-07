@@ -1,4 +1,4 @@
-#+TITLE: Elisp for beginners
+#+TITLE: Elisp for complete beginners
 #+AUTHOR: Niklas Carlsson
 #+DATE: 14 October 2018
 
@@ -8,7 +8,25 @@
 #+REVEAL_THEME: moon
 #+REVEAL_TRANS: slide
 
-* Background
+* Emacs Lisp
+
+~Things to go through:~
+- Everything is a list
+- Atoms are parts of lists
+- First atom of a list is a function
+- How to evaluate a list expression?
+
+  I want the presentation to demystify some of the emacs lisp which seems like
+  magit before you try to understand it. I also want to showcase how we can
+  build emacs code which let's us hack the way emacs behaves. And also make some
+  little function that can be useful.
+
+  - Remove branches based on regexp
+  - Show how to switch language automatically when switching between modes in
+    emacs
+  - Quicksort algorithm
+
+* Background :noexport:
 
 #+BEGIN_NOTES
 Emacs lisp is both one of the most exciting and daunting things about Emacs for
@@ -80,10 +98,8 @@ write some functions of my own to perform shell tasks.
 
 [[./images/eshell.png]]
 
-* Emacs Lisp
-
-** Resources
-*** Learn Elisp in 15 minutes
+* Resources :noexport:
+** Learn Elisp in 15 minutes
 
 https://learnxinyminutes.com/docs/elisp/
 
@@ -198,7 +214,7 @@ https://learnxinyminutes.com/docs/elisp/
 
 (boldify-names)
 #+END_SRC
-*** An introduction to Emacs Lisp
+** An introduction to Emacs Lisp
 
 Resources:
 [[https://harryrschwartz.com/2014/04/08/an-introduction-to-emacs-lisp.html][notes from the video]]
