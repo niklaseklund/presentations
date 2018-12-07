@@ -1,7 +1,6 @@
 #+TITLE: speaker_notes
 
 * Org-mode, literate programming in Emacs
-
 ** Org-mode
 
 - Emacs uses different modes, ~cpp-files~ uses ~c++-mode~
@@ -50,7 +49,6 @@ int main() {
   : Hello there
 
 - ~Ex1:~ cpp Eigen example (more advanced)
-
 
 ** Chaining
 
