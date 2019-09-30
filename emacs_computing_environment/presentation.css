@@ -14,6 +14,11 @@
 }
 
 /* Control text alignment for paragraphs */
-.reveal p {
+/* .reveal p { */
+/*     text-align: left; */
+/* } */
+
+/* Try to control a specific slide */
+slide-orgheadline1 {
     text-align: left;
 }

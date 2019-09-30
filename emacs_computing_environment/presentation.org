@@ -10,7 +10,10 @@
 #+OPTIONS: num:nil toc:nil
 #+MACRO: color @@html:<font color="$1">$2</font>@@
 
-* Text
+* NiklasCarlsson
+:PROPERTIES:
+:CUSTOM_ID: orgheadline1
+:END:
 
 This is just some text
 ** Text 2
@@ -49,3 +52,4 @@ this is a subheading, with extra properties enabled.
 - [[https://emacs.stackexchange.com/questions/38532/change-font-color-on-a-org-reveal-slide][Control the color of font on a slide]]
 - [[https://github.com/yjwen/org-reveal/issues/231][Use custom begin to reference in css]]
 - [[https://github.com/alphapapa/unpackaged.el#export-to-html-with-useful-anchors][Export org to html with useful anchors]]
+- [[https://github.com/yjwen/org-reveal/issues/160][Use slide-id in css]]
