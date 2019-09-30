@@ -53,3 +53,4 @@ this is a subheading, with extra properties enabled.
 - [[https://github.com/yjwen/org-reveal/issues/231][Use custom begin to reference in css]]
 - [[https://github.com/alphapapa/unpackaged.el#export-to-html-with-useful-anchors][Export org to html with useful anchors]]
 - [[https://github.com/yjwen/org-reveal/issues/160][Use slide-id in css]]
+- [[https://old.reddit.com/r/emacs/comments/5mgvcp/individually_set_slide_transitions_with_orgreveal/][Individual slide transitions]]
