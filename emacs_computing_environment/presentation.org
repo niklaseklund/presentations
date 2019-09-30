@@ -10,6 +10,14 @@
 #+OPTIONS: num:nil toc:nil
 #+MACRO: color @@html:<font color="$1">$2</font>@@
 
+* 
+  :PROPERTIES:
+  :reveal_background: ./images/org.jpg
+  :END:
+
+ To have slides without headings just create an empty heading, make sure to add
+ a space after the star. So need to remove the auto-removal of trailing whitespaces.
+ 
 * NiklasCarlsson
 :PROPERTIES:
 :CUSTOM_ID: orgheadline1
