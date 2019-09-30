@@ -1,0 +1,19 @@
+/* Format tables */
+.reveal table th, .reveal table td {
+    text-align: center;
+    width: 60%;
+    height: 60%;
+    border: 1px solid white;
+}
+
+/* Format code blocks */
+.reveal pre {
+    width: 100%;
+    border: none;
+    box-shadow: none;
+}
+
+/* Control text alignment for paragraphs */
+.reveal p {
+    text-align: left;
+}

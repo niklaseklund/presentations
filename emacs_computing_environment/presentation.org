@@ -1,0 +1,51 @@
+#+TITLE: Emacs computing environment
+#+REVEAL_THEME: black
+#+REVEAL_TRANSITION: slide
+#+DATE:
+
+#+REVEAL_TITLE_SLIDE: <h2>%t</h2><h3>%d</h3><h3>%a</h3>
+#+REVEAL_INIT_OPTIONS: width:1920, height:1080, margin:0.1, controls:false, slide_number:false, center:true
+#+REVEAL_EXTRA_CSS: ./presentation.css
+
+#+OPTIONS: num:nil toc:nil
+#+MACRO: color @@html:<font color="$1">$2</font>@@
+
+* Text
+
+This is just some text
+** Text 2
+
+{{{color(red,This is a sample sentence in red text color.)}}}
+
+* Code blocks
+
+#+BEGIN_SRC cpp
+#include <iostream>
+
+int main(int argc, char *argv[]) {
+    std::cout << "Hello world!" << std::endl;
+    return 0;
+}
+#+END_SRC
+
+** Subheading
+:PROPERTIES:
+:reveal_center: nil
+:reveal_background: #123456
+:END:
+
+this is a subheading, with extra properties enabled.
+* Tables
+
+| column_title1  | column_title2 |
+|----------------+---------------|
+| a              | b             |
+| a              | b             |
+| a              | b             |
+
+* Resources
+
+- [[http://nwidger.github.io/blog/post/making-a-reveal.js-presentation-with-org-reveal/][Making a reveal.js presentation with org-reveal]]
+- [[https://emacs.stackexchange.com/questions/38532/change-font-color-on-a-org-reveal-slide][Control the color of font on a slide]]
+- [[https://github.com/yjwen/org-reveal/issues/231][Use custom begin to reference in css]]
+- [[https://github.com/alphapapa/unpackaged.el#export-to-html-with-useful-anchors][Export org to html with useful anchors]]
