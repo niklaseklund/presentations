@@ -13,12 +13,36 @@
     box-shadow: none;
 }
 
-/* Control text alignment for paragraphs */
-/* .reveal p { */
-/*     text-align: left; */
+/* Try to control a specific slide */
+#orgheadline1 {
+    visibility: hidden;
+}
+
+/* /\* Control the the class reveal and subclass slides *\/ */
+/* .reveal .slides { */
+/*   font-size: 16px; */
+/*   color: Gray; */
+/*   text-align: left; */
 /* } */
 
-/* Try to control a specific slide */
-slide-orgheadline1 {
-    text-align: left;
+
+/* Control the the class reveal and subclass slides */
+.dark-title-background {
+  background-color: rgba(0, 0, 0, 0.9);
+  color: Green;
+}
+
+
+/* Make a larger top-centered dark headline */
+.dark-text {
+  color: Black;
+  font-size: 3em;
+  position: fixed;
+  bottom: 0;
+}
+
+/* Use regexp to match h3 level headlines with id orgheadline */
+.reveal h3[id^="orgheadline"] {
+    text-align: center;
+    color: Blue;
 }

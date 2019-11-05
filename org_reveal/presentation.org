@@ -1,10 +1,10 @@
 #+TITLE: Org-re-reveal
-#+REVEAL_THEME: black
+#+REVEAL_THEME: zenburn
 #+REVEAL_TRANS: convex
 #+DATE:
 
 #+REVEAL_TITLE_SLIDE: <h2>%t</h2><h3>%d</h3><h3>%a</h3>
-#+REVEAL_EXTRA_OPTIONS: width:1920, height:1200, margin:0.1, controls:false, slide_number:false, center:true
+#+REVEAL_EXTRA_OPTIONS: width:1920, height:1200, margin:0.1, controls:true, slide_number:false, center:true
 #+REVEAL_EXTRA_CSS: ./presentation.css
 
 #+OPTIONS: num:nil toc:nil
@@ -14,7 +14,7 @@
 ** Slide with colored background
 :PROPERTIES:
 :reveal_center: nil
-:reveal_background: #123456
+:reveal_background: linear-gradient(to left, #910830, #521623)
 :END:
 
 this is a subheading, with extra properties enabled.
@@ -28,13 +28,32 @@ Create slides without heading by adding a space after the star
 #+END_QUOTE
 
 * Text
-** Default text
+** Headline text
+:PROPERTIES:
+:REVEAL_EXTRA_ATTR: class="dark-text"
+:reveal_background: ./images/org.jpg
+:END:
 
-This is just normal text. This slide has a subheading.
+** Default text
+:PROPERTIES:
+:REVEAL_EXTRA_ATTR: class="dark-title-background"
+:END:
+
+This is normal text but by using ~reveal_extra_attr~ one can assign a class to
+this slide and modify it.
 
 ** Colored text
+:PROPERTIES:
+:CUSTOM_ID: orgheadline1
+:END:
 
 {{{color(red,This is a sample sentence in red text color.)}}}
+** Colors2
+:PROPERTIES:
+:CUSTOM_ID: orgheadline2
+:END:
+
+Some text
 
 * Code blocks
 ** C++
@@ -65,6 +84,7 @@ print("Hello World")
 
 * Lists
 ** Resources
+- [[https://github.com/mattdark/reveal.js-gallery][Blank headline through css]]
 - [[https://github.com/mattdark/reveal.js-gallery][Create a gallery for all your reveal presentations]]
 - [[http://nwidger.github.io/blog/post/making-a-reveal.js-presentation-with-org-reveal/][Making a reveal.js presentation with org-reveal]]
 - [[https://emacs.stackexchange.com/questions/38532/change-font-color-on-a-org-reveal-slide][Control the color of font on a slide]]
