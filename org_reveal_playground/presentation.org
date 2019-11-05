@@ -1,4 +1,4 @@
-#+TITLE: Emacs computing environment
+#+TITLE: Org Reveal Playground
 #+REVEAL_THEME: black
 #+REVEAL_TRANSITION: slide
 #+DATE:
