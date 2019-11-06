@@ -1,0 +1,29 @@
+/* Format code blocks */
+.reveal pre {
+    width: 100%;
+    border: none;
+    box-shadow: none;
+}
+
+/* Make a larger top-centered dark headline */
+.dark-text {
+  color: Black;
+  font-size: 3em;
+  position: fixed;
+  bottom: 0;
+}
+
+/* Use regexp to match h3 level headlines with id orgheadline */
+.reveal h3[id^="orgheadline"] {
+    text-align: center;
+    color: Blue;
+}
+
+/* Customize the footer */
+.reveal .slides .slide-footer{
+  position: fixed;
+  display: block;
+  left: 15px;
+  bottom: 15px;
+  z-index: 31;
+}

@@ -1,1 +1,32 @@
-#+TITLE: Emacs, the Lisp-Machine
+#+TITLE: Emacs
+# Global settings
+#+REVEAL_THEME: black
+#+REVEAL_TRANS: convex
+#+REVEAL_EXTRA_OPTIONS: width:1920, height:1200, margin:0.1, controls:true, slide_number:false, center:true
+#+REVEAL_EXTRA_CSS: ./presentation.css
+#+OPTIONS: num:nil toc:nil reveal_global_footer:nil
+#+REVEAL_SLIDE_FOOTER:
+
+# Title page
+#+Subtitle: The Lisp Machine
+#+REVEAL_TITLE_SLIDE: <h1>%t</h1><h3>%s</h3>
+#+REVEAL_TITLE_SLIDE_BACKGROUND: ./images/lambda.jpg
+
+* Philosophy
+** Free software
+
+#+BEGIN_NOTES
+The idea of free software is that the user should have the freedom to:
+#+END_NOTES
+
+#+ATTR_REVEAL: :frag (roll-in)
+- Run the program as you wish
+- Study the program and change it
+- Redistribute copies to help others
+- Distribute copies of modified versions
+
+** Empowered users
+* Lisp Machine
+** Parens
+* Interface
+** For
