@@ -25,8 +25,32 @@ The idea of free software is that the user should have the freedom to:
 - Redistribute copies to help others
 - Distribute copies of modified versions
 
-** Empowered users
+** Empowering users
+
+#+BEGIN_NOTES
+The goal is to empower users. If that is your goal then there are some design
+choices that will be made based on that ideal:
+- accessing the source code must be easy
+- reading documentation must be easy
+- changing code, even core, must be easy
+#+END_NOTES
+
 * Lisp Machine
-** Parens
-* Interface
-** For
+
+#+BEGIN_NOTES
+Emacs breathes lisp. There is such a different
+#+END_NOTES
+
+* The implementations
+
+#+BEGIN_NOTES
+Emacs has enabled the users to create:
+powerful, lean, interface to most of the things that we use.
+Examples:
+- man
+- proced
+- dired
+- magit
+- org-mode
+#+END_NOTES
+
