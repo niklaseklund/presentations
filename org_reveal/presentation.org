@@ -97,7 +97,17 @@ print("Hello World")
 
 How to set the resolutions?
 
-* Local variables :noexport:
+* Raw HTML
+
+A talk by Linus Torvalds on Git (the source code to embed that
+video makes use of attribute ~data-src~ for lazy loading of the
+video):
+#+REVEAL_HTML: <video controls width="400" height="300" data-src="https://archive.org/download/LinusTorvaldsOnGittechTalk/LinusTorvaldsOnGittechTalk.ogv"></video>
+** Local video
+
+#+REVEAL_HTML: <video controls  width="400" height="300" src="/mnt/external_arch/torrents/images/rupauls.drag.race.uk.S01E04.720p.WEBRip.x264-SERIOUSLY.mkv"></video>
+
+* Local variables                                                     :noexport:
 Local Variables:
 eval: (ws-butler-mode -1)
 End:
