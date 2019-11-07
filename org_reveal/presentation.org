@@ -11,13 +11,14 @@
 #+MACRO: color @@html:<font color="$1">$2</font>@@
 
 * Backgrounds
-** Slide with colored background
+** Slide with gradient background
 :PROPERTIES:
 :reveal_center: nil
 :reveal_background: linear-gradient(to left, #910830, #521623)
 :END:
 
-this is a subheading, with extra properties enabled.
+This slide has a ~linear-gradient~ as background.
+
 ** 
 :PROPERTIES:
 :reveal_background: ./images/org.jpg
@@ -25,6 +26,14 @@ this is a subheading, with extra properties enabled.
 
 #+BEGIN_QUOTE
 Create slides without heading by adding a space after the star
+#+END_QUOTE
+** Hidden headline
+:PROPERTIES:
+:reveal_background: ./images/org.jpg
+:END:
+
+#+BEGIN_QUOTE
+Or by using css
 #+END_QUOTE
 
 * Text
