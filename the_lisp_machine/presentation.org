@@ -46,7 +46,7 @@ In a way I think a machine is suitable, like a virtual machine. But this one is
 built on lisp and it's a programmable and modifiable computing environment.
 #+END_NOTES
 
-** Lisp, the language
+** Lisp
 
 #+BEGIN_NOTES
 Lisp is a functional programming language. Known for it's little syntax and high
@@ -65,16 +65,67 @@ to a sequence of data to calculate the sum of the list.
 (seq-reduce #'+ (number-sequence 1 100) 0)
 #+END_SRC
 
-* The implementations
+* The interface
 
 #+BEGIN_NOTES
-Emacs has enabled the users to create:
-powerful, lean, interface to most of the things that we use.
-Examples:
-- man
-- proced
-- dired
-- magit
-- org-mode
+Emacs and Lisp excels at text processing. And as we will see it manages to
+take the command line or text based interfaces and improve them.
+
+Many successful packages uses this approach:
+- Man
+- Dired
+- Magit
 #+END_NOTES
 
+* Workflows
+
+#+BEGIN_NOTES
+So far I have talked about the theoretical aspects. But what does it mean in
+practice. What kind of workflows would this enable, and how do I use Emacs?
+#+END_NOTES
+
+** Keyboard driven :noexport:
+
+#+BEGIN_NOTES
+Emacs and many of it's packages provides excellent keyboard interfaces. You can
+still use the mouse in Emacs but instead of relying upon the user to use it, it
+offers clever ways to get working effectively with your keyboard.
+#+END_NOTES
+
+#+BEGIN_NOTES
+Some examples are:
+- ivy (the actions, it's integration with avy)
+- swiper
+- avy
+#+END_NOTES
+
+** Powered up interfaces                                             :noexport:
+
+#+BEGIN_NOTES
+Some examples are:
+- dired
+- wgrep
+- man
+- lookup (docsets/online)
+- gerrit-ci
+#+END_NOTES
+
+** Lisp
+
+#+BEGIN_NOTES
+Everywhere there is lisp (means there are ways to hack):
+- .dir-locals
+- locals in org-files
+- snippets
+#+END_NOTES
+
+** Dynamic
+
+#+BEGIN_NOTES
+The lisp environment is extremely dynamic:
+- buffer narrowing
+- winner mode
+- popup buffers
+- hackable in realtime
+- implement new functionality (multi-language vim)
+#+END_NOTES
