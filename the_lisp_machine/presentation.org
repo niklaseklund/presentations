@@ -38,8 +38,32 @@ choices that will be made based on that ideal:
 * Lisp Machine
 
 #+BEGIN_NOTES
-Emacs breathes lisp. There is such a different
+I think the best way to describe Emacs is a Lisp Machine. Historically that
+might not be entirely accurate, because lisp machines of the 80s were really
+high tech completely hackable computers. But Emacs comes pretty close.
+
+In a way I think a machine is suitable, like a virtual machine. But this one is
+built on lisp and it's a programmable and modifiable computing environment.
 #+END_NOTES
+
+** Lisp, the language
+
+#+BEGIN_NOTES
+Lisp is a functional programming language. Known for it's little syntax and high
+density of parentheses.
+
+In Emacs the dialect is Emacs Lisp. There are many Lisps out there like common
+lisp, scheme, clojure.
+#+END_NOTES
+
+#+BEGIN_NOTES
+This is an example of a lisp expression. It takes a function, + and applies it
+to a sequence of data to calculate the sum of the list.
+#+END_NOTES
+
+#+BEGIN_SRC elisp
+(seq-reduce #'+ (number-sequence 1 100) 0)
+#+END_SRC
 
 * The implementations
 
