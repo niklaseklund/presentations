@@ -160,3 +160,14 @@ cli ... but doing advance stuff quickly becomes difficult:
 #+END_NOTES
 
 ** Everything in Emacs
+
+#+BEGIN_NOTES
+The power of synergies. The more you pull into Emacs the more Emacs powers
+grows. The more cool synergies you can create and you can bridge what would
+otherwise would have been two different entities (org-todo in your email for
+example)
+
+- emacs as a mail client
+- emacs as a rss client
+- emacs as an irc client
+#+END_NOTES
