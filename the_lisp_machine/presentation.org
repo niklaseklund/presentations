@@ -129,3 +129,6 @@ The lisp environment is extremely dynamic:
 - hackable in realtime
 - implement new functionality (multi-language vim)
 #+END_NOTES
+** Org-mode
+** Magit
+** Everything in Emacs
