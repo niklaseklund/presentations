@@ -117,6 +117,7 @@ Everywhere there is lisp (means there are ways to hack):
 - .dir-locals
 - locals in org-files
 - snippets
+- a lisp powered shell (eshell)
 #+END_NOTES
 
 ** Dynamic
@@ -129,6 +130,33 @@ The lisp environment is extremely dynamic:
 - hackable in realtime
 - implement new functionality (multi-language vim)
 #+END_NOTES
+
+** Power level features
+
+#+BEGIN_NOTES
+I should probably put this somewhere else and rephrase, but:
+- tramp
+- undo-tree
+#+END_NOTES
+
 ** Org-mode
+
+#+BEGIN_NOTES
+Org-mode, the Emacs gateway drug to Emacs. Powerfull beyond comprehension.
+- literate-programming
+- presentation
+- documentation
+- blog
+#+END_NOTES
+
 ** Magit
+
+#+BEGIN_NOTES
+Git is a powerful tool for version control, and it's easy to use it through the
+cli ... but doing advance stuff quickly becomes difficult:
+- magit is the true git porcelin, wrapping almost everything there is in git and
+  put the power in your hands with quickly accessible commands most of the times
+  just requiring two keypresses.
+#+END_NOTES
+
 ** Everything in Emacs
